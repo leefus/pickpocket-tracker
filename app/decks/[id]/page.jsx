@@ -5,6 +5,7 @@ import { getCardData } from "@/lib/scryfall";
 import { pretest } from "@/lib/pretest.mjs";
 import { autoEdges } from "@/lib/autoedges.mjs";
 import { pressureTable, profileDeck, selfHarm } from "@/lib/axes.mjs";
+import { jonesField } from "@/lib/jones.mjs";
 import { FALLBACK_META } from "@/lib/meta.mjs";
 
 // Matches change every time you log one; always read fresh from Notion.
@@ -56,6 +57,7 @@ export default async function DeckPage({ params, searchParams }) {
 
   // Plan profile, with matchup pressure worked out from every other active deck in the tracker.
   let plan = null;
+  let jones = null;
   if (deck) {
     try {
       const active = decks.filter((d) => d.status !== "Retired" || d.id === deck.id);
@@ -63,6 +65,11 @@ export default async function DeckPage({ params, searchParams }) {
       const field = active
         .map((d, i) => ({ name: d.name, id: d.id, profile: data[i].cards.length ? profileDeck(d.main, data[i].cards) : null }))
         .filter((f) => f.profile);
+      const ranked = jonesField(active.map((d, i) => ({ id: d.id, name: d.name, main: d.main, cards: data[i].cards })));
+      if (ranked[deck.id]) {
+        const { edges, ...rest } = ranked[deck.id];
+        jones = rest;
+      }
       const mine = field.find((f) => f.id === deck.id);
       if (mine) {
         const pressure = pressureTable(field);
@@ -87,6 +94,7 @@ export default async function DeckPage({ params, searchParams }) {
       matches={matches}
       report={report}
       plan={plan}
+      jones={jones}
       cardError={cardError}
       isNew={searchParams?.new === "1"}
       writable={canWrite()}

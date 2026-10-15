@@ -30,7 +30,13 @@ function circleOrder(cards) {
   return order;
 }
 
-export default function GraphPanel({ deck, matches }) {
+/**
+ * mode "synergy" (default): the deck's synergy graph.
+ * mode "misery": the Jeffery Jones misery graph, drawn inside the Fun Ranking panel
+ * (pass the misery edges as deck.edges); same layout, its own wording, no table.
+ */
+export default function GraphPanel({ deck, matches = [], mode = "synergy" }) {
+  const M = mode === "misery";
   const [focus, setFocus] = useState(null);
   const deadCounts = useMemo(() => {
     const m = new Map();
@@ -70,7 +76,13 @@ export default function GraphPanel({ deck, matches }) {
   const focusSet = focus ? new Set([focus, ...(g.cards.find((c) => c.name === focus)?.neighbors ?? [])]) : null;
   const dim = (n) => (focusSet && !focusSet.has(n) ? 0.18 : 1);
 
-  const tiles = [
+  const tiles = M
+    ? [
+        ["Misery links", g.edgeCount, "pairs that make each other worse to face"],
+        ["Ringleader", hubs[0] ? labels.get(hubs[0].name) ?? hubs[0].name : "—", hubs[0] ? `${hubs[0].degree} links` : "nothing compounds"],
+        ["Bystanders", g.isolated.length, "cards that don't compound anything"],
+      ]
+    : [
     ["Cards", g.vertexCount, "nonland cards in the main deck"],
     ["Synergies", g.edgeCount, `density ${g.density.toFixed(2)}`],
     ["Engines", g.components.length, g.components.length === 1 ? "one connected engine" : "separate plans"],
@@ -81,14 +93,20 @@ export default function GraphPanel({ deck, matches }) {
     ["Live by T7", g.live[7].toFixed(1), "on the play"],
   ];
 
+  const Wrap = M ? "div" : "section";
   return (
-    <section>
-      <h2>Synergy graph</h2>
+    <Wrap className={M ? "misery" : undefined}>
+      {M ? (
+        <h3 className="axis-h">Misery graph</h3>
+      ) : (
+        <h2>Synergy graph</h2>
+      )}
       <p className="sub small">
-        Each card is a node; a line means the two cards make each other better. Dashed red lines are conflicts. Tap a card to see what it
-        connects to.
+        {M
+          ? "A line means the two cards make each other worse to play against: one sets up the misery, the other cashes it in. Tap a card to see its partners in crime."
+          : "Each card is a node; a line means the two cards make each other better. Dashed red lines are conflicts. Tap a card to see what it connects to."}
       </p>
-      {isAutoEdges(deck.edges) && (
+      {!M && isAutoEdges(deck.edges) && (
         <p className="banner">
           <b>First-pass graph.</b> These links were found automatically from card text: what each card produces and which cards pay it
           off. Claude replaces them with a reviewed set within about an hour. Removal and counterspells often show as isolated here; that
@@ -132,7 +150,8 @@ export default function GraphPanel({ deck, matches }) {
             const r = 10 + 4 * Math.sqrt(c.copies);
             const cls = c.cut ? "g-node cut" : c.isolated ? "g-node iso" : c.hub ? "g-node hub" : "g-node";
             const lx = VIEW / 2 + (R + r + 10) * Math.cos(p.a);
-            const ly = VIEW / 2 + (R + r + 10) * Math.sin(p.a);
+            // Labels straight above/below the circle are centred; drop the bottom one a line so it clears its neighbours.
+            const ly = VIEW / 2 + (R + r + 10) * Math.sin(p.a) + (Math.sin(p.a) > 0.97 ? 18 : 0);
             const anchor = Math.abs(Math.cos(p.a)) < 0.05 ? "middle" : Math.cos(p.a) > 0 ? "start" : "end";
             return (
               <g
@@ -158,35 +177,49 @@ export default function GraphPanel({ deck, matches }) {
         </svg>
         <ul className="legend">
           <li>
-            <i className="dot hub" /> Hub (most synergies)
+            <i className="dot hub" /> {M ? "Ringleader (most misery links)" : "Hub (most synergies)"}
           </li>
+          {!M && (
+            <li>
+              <i className="dot cut" /> Cut vertex
+            </li>
+          )}
           <li>
-            <i className="dot cut" /> Cut vertex
+            <i className="dot" /> Other card · size = copies · number = {M ? "misery links" : "synergies"}
           </li>
-          <li>
-            <i className="dot" /> Other card · size = copies · number = synergies
-          </li>
-          <li>
-            <i className="dash" /> Conflict
-          </li>
+          {!M && (
+            <li>
+              <i className="dash" /> Conflict
+            </li>
+          )}
         </ul>
       </div>
 
       <div className="findings">
-        {hubs.length > 0 && (
+        {M && hubs.length > 0 && (
+          <p>
+            <b>Ringleaders:</b> {hubs.map((c) => `${c.name} (${c.degree} links)`).join(", ")}. Take these out and the deck gets a lot friendlier.
+          </p>
+        )}
+        {M && g.isolated.length > 0 && (
+          <p>
+            <b>Bystanders:</b> {g.isolated.join(", ")}. They may sting on their own, but they don&apos;t make anything else worse.
+          </p>
+        )}
+        {!M && hubs.length > 0 && (
           <p>
             <b>Hubs:</b> {hubs.map((c) => `${c.name} (${c.degree}, ${c.copies} cop${c.copies === 1 ? "y" : "ies"})`).join(", ")}. At least one of
             them shows up by turn 4 in {pct(pAnyHub)} of games.
             {hubs.some((c) => c.copies < 4) && " The best-connected cards are capped below 4 copies, so tutors and re-buys matter more than raw copy count."}
           </p>
         )}
-        {cutCards.map((c) => (
+        {!M && cutCards.map((c) => (
           <p key={c.name}>
             <b>Single point of failure:</b> without {c.name}, {c.stranded.join(", ")} lose{c.stranded.length === 1 ? "s" : ""} every connection to the
             engine.
           </p>
         ))}
-        {g.isolated.length > 0 && (
+        {!M && g.isolated.length > 0 && (
           <p>
             <b>Isolated:</b> {g.isolated.join(", ")}.{" "}
             {isAutoEdges(deck.edges)
@@ -209,6 +242,7 @@ export default function GraphPanel({ deck, matches }) {
         {g.problems.length > 0 && <p className="err">Edge list problems: {g.problems.join(" ")}</p>}
       </div>
 
+      {!M && (
       <div className="tbl">
         <table>
           <thead>
@@ -243,6 +277,7 @@ export default function GraphPanel({ deck, matches }) {
           </tbody>
         </table>
       </div>
-    </section>
+      )}
+    </Wrap>
   );
 }

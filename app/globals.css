@@ -180,3 +180,23 @@ details.pretest>*:not(summary)+*{margin-top:14px}
 .axes .av{text-align:right;font-size:.82rem;color:var(--muted)}
 details.cardscores{padding:10px 14px}
 details.cardscores .tbl{margin-top:10px}
+
+/* Jeffery Jones Fun Ranking */
+.jones-head{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+.jones-score{display:flex;align-items:baseline;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 18px}
+.jones-score .v{font-size:2.6rem;line-height:1;color:var(--bad)}
+.jones-score .k{color:var(--muted);font-size:.9rem}
+.jones-tier{font-family:var(--display);font-size:1.35rem;letter-spacing:.02em}
+.jones-head>div:last-child{flex:1 1 260px;min-width:0}
+.tiers{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.78rem;color:var(--muted)}
+.tiers li.on{color:var(--bad);font-weight:600}
+.offenders{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem;max-width:85ch}
+.misery{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.leaderboard{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;max-width:760px}
+.leaderboard li{display:grid;grid-template-columns:28px minmax(110px,1.2fr) minmax(80px,1fr) 36px;gap:10px;align-items:center;font-size:.95rem}
+.leaderboard .tr{grid-column:2/-1;margin-top:-6px}
+.leaderboard .rk{color:var(--muted);text-align:right}
+.leaderboard .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.leaderboard .ix{text-align:right}
+.leaderboard .ab{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.leaderboard .ab i{display:block;height:100%;background:var(--bad);border-radius:5px}

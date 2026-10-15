@@ -34,6 +34,11 @@ hathcocked-recipes).
   which of its costs are fuel, how hard every other deck in the tracker
   pressures your life (worked out automatically), and whether each
   self-harm cost is worth paying in each matchup.
+- **Jeffery Jones Fun Ranking** (an extra, after a friend's axiom that a game
+  holds a fixed amount of fun): a 0–100 index of how un-fun each deck is to
+  play against, from card text (`lib/jones.mjs`): disruption, decision
+  fatigue, annoyance and confusion, plus a "misery graph" of cards that
+  compound each other. Leaderboard on the start page, details on each deck.
 - **Claude's deck notes**: saving a new deck (or pressing *Ask Claude to
   re-check*) ticks *Analysis Requested* in Notion. An hourly Claude task in
   the project writes a pre-test review and synergy edges, then unticks it.

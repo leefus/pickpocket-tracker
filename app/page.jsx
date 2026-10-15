@@ -4,6 +4,8 @@ import { getDecks, getMatchSummary, hasNotion, missingSettings } from "@/lib/not
 import { colorCode } from "@/lib/meta.mjs";
 import { pct } from "@/lib/stats.mjs";
 import { HeaderBrand } from "@/components/Brand";
+import { getCardData } from "@/lib/scryfall";
+import { jonesField } from "@/lib/jones.mjs";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +29,19 @@ export default async function StartPage({ searchParams }) {
   } catch (err) {
     console.error("start page load failed", err);
     loadError = "Couldn't load decks from Notion. Check the token and that the integration is connected to both databases.";
+  }
+
+  // The Jeffery Jones Fun Ranking across every active deck.
+  let ranking = [];
+  try {
+    const active = decks.filter((d) => d.status !== "Retired");
+    const data = await Promise.all(active.map((d) => getCardData(d.main, d.side)));
+    const ranked = jonesField(active.map((d, i) => ({ id: d.id, name: d.name, main: d.main, cards: data[i].cards })));
+    ranking = Object.entries(ranked)
+      .map(([id, j]) => ({ id, name: j.name, index: j.index, tier: j.tier, rank: j.rank }))
+      .sort((a, b) => a.rank - b.rank);
+  } catch (err) {
+    console.error("fun ranking failed", err);
   }
 
   return (
@@ -84,6 +99,30 @@ export default async function StartPage({ searchParams }) {
           </Link>
         </li>
       </ul>
+
+      {ranking.length > 1 && (
+        <section className="jones">
+          <h2>Jeffery Jones Fun Ranking</h2>
+          <p className="sub small">
+            <i>Jeff&apos;s axiom:</i> a game only holds so much fun, so the more you have, the less your opponent does. Most un-fun first.
+          </p>
+          <ol className="leaderboard">
+            {ranking.map((r) => (
+              <li key={r.id}>
+                <span className="rk num">{r.rank}</span>
+                <Link href={`/decks/${r.id}`} className="nm">
+                  {r.name}
+                </Link>
+                <span className="ab warmbar">
+                  <i style={{ width: `${r.index}%` }} />
+                </span>
+                <span className="ix num">{r.index}</span>
+                <span className="tr sub small">{r.tier}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
     </div>
   );
 }

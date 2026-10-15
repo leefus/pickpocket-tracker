@@ -11,6 +11,7 @@ import { PasscodeRow, usePasscode } from "./usePasscode";
 import GraphPanel from "./GraphPanel";
 import PretestPanel from "./PretestPanel";
 import PlanPanel from "./PlanPanel";
+import JonesPanel from "./JonesPanel";
 import { HeaderBrand } from "./Brand";
 
 const today = () => {
@@ -25,7 +26,7 @@ const fmtDate = (iso) => {
   return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
 };
 
-export default function Tracker({ deck, decks, meta, matches, report = null, plan = null, cardError = null, isNew = false, writable, connected, missing = [], loadError }) {
+export default function Tracker({ deck, decks, meta, matches, report = null, plan = null, jones = null, cardError = null, isNew = false, writable, connected, missing = [], loadError }) {
   const router = useRouter();
   const formRef = useRef(null);
   const pc = usePasscode();
@@ -270,6 +271,7 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
           <GraphPanel deck={deck} matches={matches} />
 
           <PlanPanel plan={plan} deckName={deck.name} />
+          <JonesPanel jones={jones} deck={deck} />
 
           <section id="log">
             <h2>Log a match</h2>
