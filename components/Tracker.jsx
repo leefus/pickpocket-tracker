@@ -21,7 +21,7 @@ const fmtDate = (iso) => {
   return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
 };
 
-export default function Tracker({ deck, decks, meta, matches, writable, connected, loadError }) {
+export default function Tracker({ deck, decks, meta, matches, writable, connected, missing = [], loadError }) {
   const router = useRouter();
   const formRef = useRef(null);
   const pc = usePasscode();
@@ -131,7 +131,8 @@ export default function Tracker({ deck, decks, meta, matches, writable, connecte
 
       {!connected && (
         <div className="banner">
-          Not connected to Notion yet. Add NOTION_TOKEN, NOTION_MATCHES_DATA_SOURCE_ID and NOTION_DECKS_DATA_SOURCE_ID in Vercel, then redeploy.
+          Not connected to Notion yet. This deployment can&apos;t see: <b>{missing.join(", ")}</b>. Add {missing.length > 1 ? "them" : "it"} in
+          Vercel (Settings → Environment Variables, with Production ticked), then redeploy. <a href="/api/status">Check setup</a>
         </div>
       )}
       {loadError && <div className="banner err">{loadError}</div>}

@@ -1,5 +1,5 @@
 import Tracker from "@/components/Tracker";
-import { canWrite, getDecks, getMatches, getMeta, hasNotion } from "@/lib/notion";
+import { canWrite, getDecks, getMatches, getMeta, hasNotion, missingSettings } from "@/lib/notion";
 import { FALLBACK_META } from "@/lib/meta.mjs";
 
 // Matches change every time you log one; always read fresh from Notion.
@@ -28,5 +28,5 @@ export default async function Page({ searchParams }) {
     }
   }
 
-  return <Tracker deck={deck} decks={decks} meta={meta} matches={matches} writable={canWrite()} connected={hasNotion()} loadError={loadError} />;
+  return <Tracker deck={deck} decks={decks} meta={meta} matches={matches} writable={canWrite()} connected={hasNotion()} missing={missingSettings()} loadError={loadError} />;
 }
