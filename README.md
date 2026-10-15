@@ -43,3 +43,29 @@ npm test                           # list parsing, stats and Notion mapping
 One opponent per line, `Opponent | In | Out`. Put your two hardest matchups
 first: the opponent table holds those two to a 35% bar instead of the
 deck's gate win rate.
+
+## Synergy graph
+
+Each deck can carry a **Synergy Edges** list in Notion (also on the Add a deck
+form), one per line:
+
+```
+Rank Rat -- Tinybones, Pocket Nuisance | discard pings
+Ambrosia Whiteheart !! Sheltered by Ghosts | bounce frees their permanent
+```
+
+`--` is a synergy, `!!` a conflict. Only nonland main-deck cards count (lands
+are recognized from the Standard pool in `lib/standard-lands.mjs`). The page
+draws the graph and reports, in the same terms as the Claude project's Step 8
+write-up: isolated cards, connected components (engines), cut vertices
+(single points of failure, and which cards they strand), λ₂ (algebraic
+connectivity), and the expected number of synergies with both cards seen by
+turns 4 and 7 (hypergeometric, on the play). It joins per-card degree with the
+dead-card flags from your matches. The math is in `lib/graph.mjs`, tested in
+`lib/graph.test.mjs`.
+
+## Installing on a phone
+
+It's a progressive web app. On Android/Chrome, accept the install banner. On
+iPhone, open it in Safari → Share → Add to Home Screen. Pages you've loaded
+open offline; logging a match needs a connection.

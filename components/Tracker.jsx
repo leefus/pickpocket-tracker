@@ -8,6 +8,7 @@ import { deadCardChoices, parseGuide, parseList } from "@/lib/decklist.mjs";
 import { ARCHETYPES, COLORS, EVENTS, NOT_IN_META, colorCode } from "@/lib/meta.mjs";
 import { opponentLabel, pct, summarize, won, worstFromGuide } from "@/lib/stats.mjs";
 import { PasscodeRow, usePasscode } from "./usePasscode";
+import GraphPanel from "./GraphPanel";
 
 const today = () => {
   const d = new Date();
@@ -222,7 +223,9 @@ export default function Tracker({ deck, decks, meta, matches, writable, connecte
             </div>
           </section>
 
-          <section>
+          <GraphPanel deck={deck} matches={matches} />
+
+          <section id="log">
             <h2>Log a match</h2>
             <form id="f" ref={formRef} onSubmit={onSubmit}>
               <input type="hidden" name="deckId" value={deck.id} />

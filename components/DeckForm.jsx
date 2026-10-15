@@ -122,6 +122,16 @@ export default function DeckForm({ writable }) {
           className="mono"
         />
       </label>
+      <label className="wide">
+        Synergy edges <span className="hint">optional, one per line: Card A -- Card B | why. Use !! for cards that work against each other.</span>
+        <textarea
+          id="d-edges"
+          name="edges"
+          rows={6}
+          placeholder={"Rank Rat -- Tinybones, Pocket Nuisance | discard pings\nAmbrosia Whiteheart !! Sheltered by Ghosts | bounce frees their permanent"}
+          className={`mono ${errCls("edges") ?? ""}`}
+        />
+      </label>
       <label>
         Testing gate (matches)
         <input id="d-gm" name="gateMatches" type="number" min={5} max={500} defaultValue={30} className={errCls("gateMatches")} />

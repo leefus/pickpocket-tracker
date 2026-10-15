@@ -1,8 +1,14 @@
 import "./globals.css";
+import PWA from "@/components/PWA";
 
 export const metadata = {
   title: "Pickpocket Match Log",
-  description: "Bo3 match log for the Orzhov Pickpocket Standard deck.",
+  description: "Log Bo3 matches, track win rates by matchup, and read Claude's deck notes.",
+  manifest: "/manifest.webmanifest",
+  applicationName: "Match Log",
+  icons: { icon: "/favicon.png", apple: "/apple-touch-icon.png" },
+  appleWebApp: { capable: true, title: "Match Log", statusBarStyle: "black-translucent" },
+  formatDetection: { telephone: false },
 };
 
 export const viewport = {
@@ -26,7 +32,10 @@ export default function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@500;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <PWA />
+      </body>
     </html>
   );
 }
