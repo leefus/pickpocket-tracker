@@ -1,0 +1,388 @@
+[
+ {
+  "name": "Burst Lightning",
+  "layout": "normal",
+  "mana_cost": "{R}",
+  "cmc": 1,
+  "type_line": "Instant",
+  "oracle_text": "Kicker {4} (You may pay an additional {4} as you cast this spell.)\nBurst Lightning deals 2 damage to any target. If this spell was kicked, it deals 4 damage instead.",
+  "produced_mana": null,
+  "colors": [
+   "R"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Eddymurk Crab",
+  "layout": "normal",
+  "mana_cost": "{5}{U}{U}",
+  "cmc": 7,
+  "type_line": "Creature — Elemental Crab",
+  "oracle_text": "Flash\nThis spell costs {1} less to cast for each instant and sorcery card in your graveyard.\nThis creature enters tapped if it's not your turn.\nWhen this creature enters, tap up to two target creatures.",
+  "produced_mana": null,
+  "colors": [
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Get Out",
+  "layout": "normal",
+  "mana_cost": "{U}{U}",
+  "cmc": 2,
+  "type_line": "Instant",
+  "oracle_text": "Choose one —\n• Counter target creature or enchantment spell.\n• Return one or two target creatures and/or enchantments you own to your hand.",
+  "produced_mana": null,
+  "colors": [
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Hearth Elemental // Stoke Genius",
+  "layout": "adventure",
+  "mana_cost": "{5}{R} // {1}{R}",
+  "cmc": 6,
+  "type_line": "Creature — Elemental // Sorcery — Adventure",
+  "oracle_text": null,
+  "produced_mana": null,
+  "colors": [
+   "R"
+  ],
+  "card_faces": [
+   {
+    "name": "Hearth Elemental",
+    "mana_cost": "{5}{R}",
+    "type_line": "Creature — Elemental",
+    "oracle_text": "This spell costs {X} less to cast, where X is the number of cards in your graveyard that are instant cards, sorcery cards, and/or have an Adventure."
+   },
+   {
+    "name": "Stoke Genius",
+    "mana_cost": "{1}{R}",
+    "type_line": "Sorcery — Adventure",
+    "oracle_text": "Discard your hand, then draw two cards. (Then exile this card. You may cast the creature later from exile.)"
+   }
+  ]
+ },
+ {
+  "name": "Impractical Joke",
+  "layout": "normal",
+  "mana_cost": "{R}",
+  "cmc": 1,
+  "type_line": "Sorcery",
+  "oracle_text": "Damage can't be prevented this turn. Impractical Joke deals 3 damage to up to one target creature or planeswalker.",
+  "produced_mana": null,
+  "colors": [
+   "R"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Island",
+  "layout": "normal",
+  "mana_cost": "",
+  "cmc": 0,
+  "type_line": "Basic Land — Island",
+  "oracle_text": "({T}: Add {U}.)",
+  "produced_mana": [
+   "U"
+  ],
+  "colors": [],
+  "card_faces": null
+ },
+ {
+  "name": "Opt",
+  "layout": "normal",
+  "mana_cost": "{U}",
+  "cmc": 1,
+  "type_line": "Instant",
+  "oracle_text": "Scry 1. (Look at the top card of your library. You may put that card on the bottom.)\nDraw a card.",
+  "produced_mana": null,
+  "colors": [
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Prismari Charm",
+  "layout": "normal",
+  "mana_cost": "{U}{R}",
+  "cmc": 2,
+  "type_line": "Instant",
+  "oracle_text": "Choose one —\n• Surveil 2, then draw a card.\n• Prismari Charm deals 1 damage to each of one or two targets.\n• Return target nonland permanent to its owner's hand.",
+  "produced_mana": null,
+  "colors": [
+   "R",
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Riverpyre Verge",
+  "layout": "normal",
+  "mana_cost": "",
+  "cmc": 0,
+  "type_line": "Land",
+  "oracle_text": "{T}: Add {R}.\n{T}: Add {U}. Activate only if you control an Island or a Mountain.",
+  "produced_mana": [
+   "R",
+   "U"
+  ],
+  "colors": [],
+  "card_faces": null
+ },
+ {
+  "name": "Sear",
+  "layout": "normal",
+  "mana_cost": "{1}{R}",
+  "cmc": 2,
+  "type_line": "Instant",
+  "oracle_text": "Sear deals 4 damage to target creature or planeswalker.",
+  "produced_mana": null,
+  "colors": [
+   "R"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Sleight of Hand",
+  "layout": "normal",
+  "mana_cost": "{U}",
+  "cmc": 1,
+  "type_line": "Sorcery",
+  "oracle_text": "Look at the top two cards of your library. Put one of them into your hand and the other on the bottom of your library.",
+  "produced_mana": null,
+  "colors": [
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Spell Pierce",
+  "layout": "normal",
+  "mana_cost": "{U}",
+  "cmc": 1,
+  "type_line": "Instant",
+  "oracle_text": "Counter target noncreature spell unless its controller pays {2}.",
+  "produced_mana": null,
+  "colors": [
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Spell Snare",
+  "layout": "normal",
+  "mana_cost": "{U}",
+  "cmc": 1,
+  "type_line": "Instant",
+  "oracle_text": "Counter target spell with mana value 2.",
+  "produced_mana": null,
+  "colors": [
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Spirebluff Canal",
+  "layout": "normal",
+  "mana_cost": "",
+  "cmc": 0,
+  "type_line": "Land",
+  "oracle_text": "This land enters tapped unless you control two or fewer other lands.\n{T}: Add {U} or {R}.",
+  "produced_mana": [
+   "R",
+   "U"
+  ],
+  "colors": [],
+  "card_faces": null
+ },
+ {
+  "name": "Steam Vents",
+  "layout": "normal",
+  "mana_cost": "",
+  "cmc": 0,
+  "type_line": "Land — Island Mountain",
+  "oracle_text": "({T}: Add {U} or {R}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
+  "produced_mana": [
+   "R",
+   "U"
+  ],
+  "colors": [],
+  "card_faces": null
+ },
+ {
+  "name": "Stormcarved Coast",
+  "layout": "normal",
+  "mana_cost": "",
+  "cmc": 0,
+  "type_line": "Land",
+  "oracle_text": "This land enters tapped unless you control two or more other lands.\n{T}: Add {U} or {R}.",
+  "produced_mana": [
+   "R",
+   "U"
+  ],
+  "colors": [],
+  "card_faces": null
+ },
+ {
+  "name": "Sunderflock",
+  "layout": "normal",
+  "mana_cost": "{7}{U}{U}",
+  "cmc": 9,
+  "type_line": "Creature — Elemental",
+  "oracle_text": "This spell costs {X} less to cast, where X is the greatest mana value among Elementals you control.\nFlying\nWhen this creature enters, if you cast it, return all non-Elemental creatures to their owners' hands.",
+  "produced_mana": null,
+  "colors": [
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Thundering Falls",
+  "layout": "normal",
+  "mana_cost": "",
+  "cmc": 0,
+  "type_line": "Land — Island Mountain",
+  "oracle_text": "({T}: Add {U} or {R}.)\nThis land enters tapped.\nWhen this land enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "produced_mana": [
+   "R",
+   "U"
+  ],
+  "colors": [],
+  "card_faces": null
+ },
+ {
+  "name": "Traumatic Critique",
+  "layout": "normal",
+  "mana_cost": "{X}{U}{R}",
+  "cmc": 2,
+  "type_line": "Instant",
+  "oracle_text": "Traumatic Critique deals X damage to any target. Draw two cards, then discard a card.",
+  "produced_mana": null,
+  "colors": [
+   "R",
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Annul",
+  "layout": "normal",
+  "mana_cost": "{U}",
+  "cmc": 1,
+  "type_line": "Instant",
+  "oracle_text": "Counter target artifact or enchantment spell.",
+  "produced_mana": null,
+  "colors": [
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Broadside Barrage",
+  "layout": "normal",
+  "mana_cost": "{1}{U}{R}",
+  "cmc": 3,
+  "type_line": "Instant",
+  "oracle_text": "Broadside Barrage deals 5 damage to target creature or planeswalker. Draw a card, then discard a card.",
+  "produced_mana": null,
+  "colors": [
+   "R",
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Colorstorm Stallion",
+  "layout": "normal",
+  "mana_cost": "{1}{U}{R}",
+  "cmc": 3,
+  "type_line": "Creature — Elemental Horse",
+  "oracle_text": "Ward {1}, haste\nOpus — Whenever you cast an instant or sorcery spell, this creature gets +1/+1 until end of turn. If five or more mana was spent to cast that spell, create a token that's a copy of this creature.",
+  "produced_mana": null,
+  "colors": [
+   "R",
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Disdainful Stroke",
+  "layout": "normal",
+  "mana_cost": "{1}{U}",
+  "cmc": 2,
+  "type_line": "Instant",
+  "oracle_text": "Counter target spell with mana value 4 or greater.",
+  "produced_mana": null,
+  "colors": [
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Flashfreeze",
+  "layout": "normal",
+  "mana_cost": "{1}{U}",
+  "cmc": 2,
+  "type_line": "Instant",
+  "oracle_text": "Counter target red or green spell.",
+  "produced_mana": null,
+  "colors": [
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Ghost Vacuum",
+  "layout": "normal",
+  "mana_cost": "{1}",
+  "cmc": 1,
+  "type_line": "Artifact",
+  "oracle_text": "{T}: Exile target card from a graveyard.\n{6}, {T}, Sacrifice this artifact: Put each creature card exiled with this artifact onto the battlefield under your control with a flying counter on it. Each of them is a 1/1 Spirit in addition to its other types. Activate only as a sorcery.",
+  "produced_mana": null,
+  "colors": [],
+  "card_faces": null
+ },
+ {
+  "name": "Hydro-Man, Fluid Felon",
+  "layout": "normal",
+  "mana_cost": "{U}{U}",
+  "cmc": 2,
+  "type_line": "Legendary Creature — Elemental Villain",
+  "oracle_text": "Whenever you cast a blue spell, if Hydro-Man is a creature, he gets +1/+1 until end of turn.\nAt the beginning of your end step, untap Hydro-Man. Until your next turn, he becomes a land and gains \"{T}: Add {U}.\" (He's not a creature during that time.)",
+  "produced_mana": [
+   "U"
+  ],
+  "colors": [
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Into the Flood Maw",
+  "layout": "normal",
+  "mana_cost": "{U}",
+  "cmc": 1,
+  "type_line": "Instant",
+  "oracle_text": "Gift a tapped Fish (You may promise an opponent a gift as you cast this spell. If you do, they create a tapped 1/1 blue Fish creature token before its other effects.)\nReturn target creature an opponent controls to its owner's hand. If the gift was promised, instead return target nonland permanent an opponent controls to its owner's hand.",
+  "produced_mana": null,
+  "colors": [
+   "U"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Return the Favor",
+  "layout": "normal",
+  "mana_cost": "{R}{R}",
+  "cmc": 2,
+  "type_line": "Instant",
+  "oracle_text": "Spree (Choose one or more additional costs.)\n+ {1} — Copy target instant spell, sorcery spell, activated ability, or triggered ability. You may choose new targets for the copy.\n+ {1} — Change the target of target spell or ability with a single target.",
+  "produced_mana": null,
+  "colors": [
+   "R"
+  ],
+  "card_faces": null
+ }
+]

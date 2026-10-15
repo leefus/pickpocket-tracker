@@ -70,7 +70,10 @@ export default function PretestPanel({ report: r, error, open }) {
               </div>
             ))}
           </div>
-          <p className="small sub">Spells by mana value. Lands left out.</p>
+          <p className="small sub">
+            Spells by printed mana value. Lands left out.
+            {r.reducers?.length > 0 && ` ${r.reducers.map((x) => x.name).join(", ")} usually cost much less than shown.`}
+          </p>
         </section>
 
         <section>
