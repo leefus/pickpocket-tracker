@@ -6,3 +6,6 @@ out
 .env*.local
 .vercel
 .DS_Store
+
+# local staging for project-doc uploads
+.upload/
