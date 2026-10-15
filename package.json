@@ -1,0 +1,18 @@
+{
+  "name": "pickpocket-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "node --test lib/*.test.mjs"
+  },
+  "dependencies": {
+    "@notionhq/client": "^5.1.0",
+    "next": "^14.2.33",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "server-only": "^0.0.1"
+  }
+}
