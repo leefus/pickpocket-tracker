@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { analyzeDeck, pSeen, shortLabels } from "@/lib/graph.mjs";
 import { pct } from "@/lib/stats.mjs";
+import { isAutoEdges } from "@/lib/autoedges.mjs";
 
 const VIEW = 640;
 const R = 200;
@@ -87,6 +88,13 @@ export default function GraphPanel({ deck, matches }) {
         Each card is a node; a line means the two cards make each other better. Dashed red lines are conflicts. Tap a card to see what it
         connects to.
       </p>
+      {isAutoEdges(deck.edges) && (
+        <p className="banner">
+          <b>First-pass graph.</b> These links were found automatically from card text: what each card produces and which cards pay it
+          off. Claude replaces them with a reviewed set within about an hour. Removal and counterspells often show as isolated here; that
+          usually means they&apos;re there to interact, not that they&apos;re weak.
+        </p>
+      )}
 
       <div className="strip tight">
         {tiles.map(([k, v, sub]) => (
@@ -180,7 +188,10 @@ export default function GraphPanel({ deck, matches }) {
         ))}
         {g.isolated.length > 0 && (
           <p>
-            <b>Isolated:</b> {g.isolated.join(", ")}. They help only on their own; first cards to question.
+            <b>Isolated:</b> {g.isolated.join(", ")}.{" "}
+            {isAutoEdges(deck.edges)
+              ? "Nothing in their text links them to the rest of the deck. That's normal for removal and counterspells; Claude's review will say if it matters."
+              : "They help only on their own; first cards to question."}
           </p>
         )}
         {g.conflicts.map((e) => (

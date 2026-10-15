@@ -20,6 +20,12 @@ hathcocked-recipes).
   sources and Karsten-style casting odds, how each land enters, opening-hand
   land counts, removal count, and a check that each sideboard plan balances.
   It opens automatically for a new deck or one with no matches.
+- **Synergy graph on every deck**: saving a deck without edges builds a
+  first-pass graph from Scryfall card text (`lib/autoedges.mjs`: what each
+  card produces and which cards pay it off), stored in Notion under an
+  `# Auto-generated` header. A deck with no edges at all (typed into Notion)
+  gets the same graph on its page. Claude's hourly review replaces
+  auto-generated edges with a reviewed, rule-based set.
 - **Claude's deck notes**: saving a new deck (or pressing *Ask Claude to
   re-check*) ticks *Analysis Requested* in Notion. An hourly Claude task in
   the project writes a pre-test review and synergy edges, then unticks it.

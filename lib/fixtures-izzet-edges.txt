@@ -1,0 +1,27 @@
+Burst Lightning -- Eddymurk Crab | R1 fuel: an instant or sorcery in the graveyard makes Crab {1} cheaper
+Burst Lightning -- Hearth Elemental | R1 fuel: an instant or sorcery in the graveyard makes Hearth Elemental {1} cheaper
+Get Out -- Eddymurk Crab | R1 fuel: an instant or sorcery in the graveyard makes Crab {1} cheaper; R5 re-buy: save it from removal, recast cheaply
+Get Out -- Hearth Elemental | R1 fuel: an instant or sorcery in the graveyard makes Hearth Elemental {1} cheaper; R5 re-buy: save it from removal, recast cheaply
+Impractical Joke -- Eddymurk Crab | R1 fuel: an instant or sorcery in the graveyard makes Crab {1} cheaper
+Impractical Joke -- Hearth Elemental | R1 fuel: an instant or sorcery in the graveyard makes Hearth Elemental {1} cheaper
+Opt -- Eddymurk Crab | R1 fuel: an instant or sorcery in the graveyard makes Crab {1} cheaper
+Opt -- Hearth Elemental | R1 fuel: an instant or sorcery in the graveyard makes Hearth Elemental {1} cheaper
+Prismari Charm -- Eddymurk Crab | R1 fuel: an instant or sorcery in the graveyard makes Crab {1} cheaper; R2 self-fill: surveil 2 can bin more spells
+Prismari Charm -- Hearth Elemental | R1 fuel: an instant or sorcery in the graveyard makes Hearth Elemental {1} cheaper; R2 self-fill: surveil 2 can bin more spells
+Sear -- Eddymurk Crab | R1 fuel: an instant or sorcery in the graveyard makes Crab {1} cheaper
+Sear -- Hearth Elemental | R1 fuel: an instant or sorcery in the graveyard makes Hearth Elemental {1} cheaper
+Sleight of Hand -- Eddymurk Crab | R1 fuel: an instant or sorcery in the graveyard makes Crab {1} cheaper
+Sleight of Hand -- Hearth Elemental | R1 fuel: an instant or sorcery in the graveyard makes Hearth Elemental {1} cheaper
+Spell Pierce -- Eddymurk Crab | R1 fuel: an instant or sorcery in the graveyard makes Crab {1} cheaper; R4 protect: counters a noncreature removal spell aimed at it
+Spell Pierce -- Hearth Elemental | R1 fuel: an instant or sorcery in the graveyard makes Hearth Elemental {1} cheaper; R4 protect: counters a noncreature removal spell aimed at it
+Spell Snare -- Eddymurk Crab | R1 fuel: an instant or sorcery in the graveyard makes Crab {1} cheaper; R4 protect: counters a 2-mana removal spell aimed at it
+Spell Snare -- Hearth Elemental | R1 fuel: an instant or sorcery in the graveyard makes Hearth Elemental {1} cheaper; R4 protect: counters a 2-mana removal spell aimed at it
+Traumatic Critique -- Eddymurk Crab | R1 fuel: an instant or sorcery in the graveyard makes Crab {1} cheaper; R2 self-fill: the discard can bin another spell
+Traumatic Critique -- Hearth Elemental | R1 fuel: an instant or sorcery in the graveyard makes Hearth Elemental {1} cheaper; R2 self-fill: the discard can bin another spell
+Hearth Elemental -- Eddymurk Crab | R2 self-fill: Stoke Genius discards your hand, filling the graveyard for Crab
+Eddymurk Crab -- Sunderflock | R3 big Elemental: Crab (MV 7) makes Sunderflock cost {U}{U}, and Sunderflock doesn’t bounce it
+Hearth Elemental -- Sunderflock | R3 big Elemental: Hearth (MV 6) makes Sunderflock cost {1}{U}{U}, and Sunderflock doesn’t bounce it
+Spell Pierce -- Sunderflock | R4 protect: counters a noncreature removal spell aimed at it
+Spell Snare -- Sunderflock | R4 protect: counters a 2-mana removal spell aimed at it
+Get Out -- Sunderflock | R5 re-buy: return Sunderflock to hand and cast it again for another one-sided bounce
+Prismari Charm -- Sunderflock | R5 re-buy: bounce your own Sunderflock and cast it again

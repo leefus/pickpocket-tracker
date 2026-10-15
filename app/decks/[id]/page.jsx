@@ -3,6 +3,7 @@ import Tracker from "@/components/Tracker";
 import { canWrite, getDecks, getMatches, getMeta, hasNotion, missingSettings } from "@/lib/notion";
 import { getCardData } from "@/lib/scryfall";
 import { pretest } from "@/lib/pretest.mjs";
+import { autoEdges } from "@/lib/autoedges.mjs";
 import { FALLBACK_META } from "@/lib/meta.mjs";
 
 // Matches change every time you log one; always read fresh from Notion.
@@ -30,7 +31,7 @@ export default async function DeckPage({ params, searchParams }) {
     loadError = "Couldn't load decks from Notion. Check the token and that the integration is connected to both databases.";
   }
 
-  const deck = decks.find((d) => d.id === params.id) ?? null;
+  let deck = decks.find((d) => d.id === params.id) ?? null;
   if (!deck && !loadError && hasNotion()) notFound();
 
   let report = null;
@@ -47,6 +48,9 @@ export default async function DeckPage({ params, searchParams }) {
     matches = m;
     cardError = cards.error ?? null;
     if (cards.cards.length) report = pretest({ main: deck.main, side: deck.side, guide: deck.guide, cards: cards.cards });
+    // A deck typed straight into Notion (or added before this existed) still gets a graph.
+    // Shown only; nothing is written on a page view.
+    if (!deck.edges && cards.cards.length) deck = { ...deck, edges: autoEdges(deck.main, cards.cards).text };
   }
 
   return (

@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { APIErrorCode, isNotionClientError } from "@notionhq/client";
 import { canWrite, createDeckPage, createMatchPage, getMeta, requestAnalysisPage, trashMatchPage } from "@/lib/notion";
 import { parseDeckInput, parseMatchInput } from "@/lib/mapping.mjs";
+import { getCardData } from "@/lib/scryfall";
+import { autoEdges } from "@/lib/autoedges.mjs";
 
 const checkPasscode = (given) => {
   if (!canWrite()) return { error: "Saving isn't switched on yet. Add the Notion variables and TRACKER_PASSCODE in Vercel." };
@@ -67,6 +69,12 @@ export async function addDeck(formData) {
   if (denied) return denied;
   const parsed = parseDeckInput((k) => formData.get(k), (k) => formData.getAll(k));
   if (parsed.error) return parsed;
+  // Every new deck gets a synergy graph straight away: first-pass edges from card text,
+  // which Claude's hourly review replaces with a reviewed set.
+  if (!parsed.deck.edges) {
+    const { cards } = await getCardData(parsed.deck.main, parsed.deck.side);
+    if (cards.length) parsed.deck.edges = autoEdges(parsed.deck.main, cards).text;
+  }
   try {
     const page = await createDeckPage(parsed.deck);
     revalidatePath("/", "layout");

@@ -1,0 +1,58 @@
+Rank Rat -- Tinybones, Pocket Nuisance | R1 discard: ETB opponent discards → Pocket Nuisance pings
+Rank Rat -- Hostile Investigator | R1 discard: ETB opponent discards → Investigator makes a Clue
+Bitter Triumph -- Tinybones, Pocket Nuisance | R1 discard: discard as its cost → Pocket Nuisance pings
+Bitter Triumph -- Hostile Investigator | R1 discard: discard as its cost → Investigator makes a Clue
+Liliana the Faultless -- Tinybones, Pocket Nuisance | R1 discard: discard as its cost → Pocket Nuisance pings; R6 protect: Liliana gives hexproof
+Liliana the Faultless -- Hostile Investigator | R1 discard: discard as its cost → Investigator makes a Clue
+Tinybones Joins Up -- Tinybones, Pocket Nuisance | R1 discard: ETB discard → Pocket Nuisance pings; R2 legend enters → Joins Up drains 1, mills 1
+Tinybones Joins Up -- Hostile Investigator | R1 discard: ETB discard → Investigator makes a Clue
+Hostile Investigator -- Tinybones, Pocket Nuisance | R1 discard: ETB opponent discards → Pocket Nuisance pings; R1 discard: ETB opponent discards → Investigator makes a Clue
+Liliana the Faultless -- Tinybones Joins Up | R2 legend enters → Joins Up drains 1, mills 1
+Tinybones, the Pickpocket -- Tinybones Joins Up | R2 legend enters → Joins Up drains 1, mills 1; R4 graveyard: discard and mill feeds Pickpocket (permanents)
+Black Widow, Super Spy -- Tinybones Joins Up | R2 legend enters → Joins Up drains 1, mills 1
+Reno and Rude -- Tinybones Joins Up | R2 legend enters → Joins Up drains 1, mills 1
+Nita, Forum Conciliator -- Tinybones Joins Up | R2 legend enters → Joins Up drains 1, mills 1; R4 graveyard: discard and mill feeds Nita (instants and sorceries)
+Ambrosia Whiteheart -- Tinybones Joins Up | R2 legend enters → Joins Up drains 1, mills 1; R3 re-entry: replay for another discard
+Rescue Girl, First Responder -- Tinybones Joins Up | R2 legend enters → Joins Up drains 1, mills 1; R3 re-entry: replay for another discard
+Rescue Girl, First Responder -- Rank Rat | R3 re-entry: replay for another discard
+Rescue Girl, First Responder -- Tinybones, Pocket Nuisance | R3 re-entry: replay for another discard
+Rescue Girl, First Responder -- Lich's Relic | R3 re-entry: replay for another kill
+Rescue Girl, First Responder -- Hostile Investigator | R3 re-entry: replay for another discard
+Rescue Girl, First Responder -- The Seriema | R3 re-entry: replay for another tutor; R5 tutor: The Seriema finds it
+Rescue Girl, First Responder -- Ambrosia Whiteheart | R3 re-entry: replay for another bounce
+Rescue Girl, First Responder -- Liliana the Faultless | R3 re-entry: replayed creatures trigger Liliana's lifegain
+Ambrosia Whiteheart -- Rank Rat | R3 re-entry: replay for another discard
+Ambrosia Whiteheart -- Tinybones, Pocket Nuisance | R3 re-entry: replay for another discard; R6 protect: Ambrosia saves it at instant speed
+Ambrosia Whiteheart -- Lich's Relic | R3 re-entry: replay for another kill
+Ambrosia Whiteheart -- Hostile Investigator | R3 re-entry: replay for another discard
+Ambrosia Whiteheart -- The Seriema | R3 re-entry: replay for another tutor; R5 tutor: The Seriema finds it
+Ambrosia Whiteheart -- Liliana the Faultless | R3 re-entry: replayed creatures trigger Liliana's lifegain
+Rank Rat -- Tinybones, the Pickpocket | R4 graveyard: discard feeds Pickpocket (permanents)
+Rank Rat -- Nita, Forum Conciliator | R4 graveyard: discard feeds Nita (instants and sorceries); R9 fodder: a spent Rank Rat pays Nita's sacrifice
+Tinybones, Pocket Nuisance -- Tinybones, the Pickpocket | R4 graveyard: discard feeds Pickpocket (permanents)
+Tinybones, Pocket Nuisance -- Nita, Forum Conciliator | R4 graveyard: discard feeds Nita (instants and sorceries)
+Hostile Investigator -- Tinybones, the Pickpocket | R4 graveyard: discard feeds Pickpocket (permanents)
+Hostile Investigator -- Nita, Forum Conciliator | R4 graveyard: discard feeds Nita (instants and sorceries)
+Lich's Relic -- Tinybones, the Pickpocket | R4 graveyard: destroy feeds Pickpocket (permanents); R7 connect: equipped +2/+1 helps the thief connect
+Bitter Triumph -- Tinybones, the Pickpocket | R4 graveyard: destroy feeds Pickpocket (permanents)
+The Seriema -- Liliana the Faultless | R5 tutor: The Seriema finds it
+The Seriema -- Tinybones, the Pickpocket | R5 tutor: The Seriema finds it
+The Seriema -- Black Widow, Super Spy | R5 tutor: The Seriema finds it
+The Seriema -- Reno and Rude | R5 tutor: The Seriema finds it; R9 fodder: spent body, Clue or Seriema pays Reno and Rude's sacrifice
+The Seriema -- Nita, Forum Conciliator | R5 tutor: The Seriema finds it
+The Seriema -- Tinybones, Pocket Nuisance | R5 tutor: The Seriema finds it
+Sheltered by Ghosts -- Tinybones, Pocket Nuisance | R6 protect: Sheltered gives ward {2} and lifelink
+Liliana the Faultless -- Tinybones, the Pickpocket | R6 protect: Liliana gives hexproof
+Ambrosia Whiteheart -- Tinybones, the Pickpocket | R6 protect: Ambrosia saves it at instant speed
+Sheltered by Ghosts -- Tinybones, the Pickpocket | R6 protect: Sheltered gives ward {2} and lifelink; R7 connect: +1/+0 and lifelink on a thief
+Lich's Relic -- Black Widow, Super Spy | R7 connect: equipped +2/+1 helps the thief connect
+Sheltered by Ghosts -- Black Widow, Super Spy | R7 connect: +1/+0 and lifelink on a thief
+Lich's Relic -- Reno and Rude | R7 connect: equipped +2/+1 helps the thief connect
+Sheltered by Ghosts -- Reno and Rude | R7 connect: +1/+0 and lifelink on a thief
+Tinybones, the Pickpocket -- Nita, Forum Conciliator | R8 steal payoff: casting their card puts a +1/+1 counter on each creature
+Black Widow, Super Spy -- Nita, Forum Conciliator | R8 steal payoff: casting their card puts a +1/+1 counter on each creature
+Reno and Rude -- Nita, Forum Conciliator | R8 steal payoff: casting their card puts a +1/+1 counter on each creature
+Rank Rat -- Reno and Rude | R9 fodder: spent body, Clue or Seriema pays Reno and Rude's sacrifice
+Hostile Investigator -- Reno and Rude | R9 fodder: spent body, Clue or Seriema pays Reno and Rude's sacrifice
+Ambrosia Whiteheart !! Sheltered by Ghosts | bouncing the enchanted creature drops the Aura and frees their permanent
+Rescue Girl, First Responder !! Sheltered by Ghosts | bouncing the enchanted creature drops the Aura and frees their permanent
