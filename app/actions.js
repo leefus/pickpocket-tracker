@@ -2,27 +2,27 @@
 
 import { revalidatePath } from "next/cache";
 import { APIErrorCode, isNotionClientError } from "@notionhq/client";
-import { canWrite, createMatchPage, trashMatchPage } from "@/lib/notion";
-import { parseMatchInput } from "@/lib/mapping.mjs";
+import { canWrite, createDeckPage, createMatchPage, getMeta, trashMatchPage } from "@/lib/notion";
+import { parseDeckInput, parseMatchInput } from "@/lib/mapping.mjs";
 
 const checkPasscode = (given) => {
-  if (!canWrite()) return { error: "Saving isn't switched on yet. Add NOTION_TOKEN and TRACKER_PASSCODE in Vercel." };
+  if (!canWrite()) return { error: "Saving isn't switched on yet. Add the Notion variables and TRACKER_PASSCODE in Vercel." };
   if (String(given ?? "") !== process.env.TRACKER_PASSCODE) return { error: "That passcode isn't right.", field: "passcode" };
   return null;
 };
 
-const notionError = (err, verb) => {
-  console.error(`${verb} failed`, err);
+const notionError = (err, what) => {
+  console.error(`${what} failed`, err);
   if (isNotionClientError(err)) {
     if ([APIErrorCode.Unauthorized, APIErrorCode.RestrictedResource, APIErrorCode.ObjectNotFound].includes(err.code)) {
       return {
         error:
-          "Notion refused it. Check that the integration is connected to the Pickpocket Match Log database and has Insert and Update content.",
+          "Notion refused it. Check that the integration is connected to both the Pickpocket Match Log and Pickpocket Decks databases and has Insert and Update content.",
       };
     }
-    if (err.code === APIErrorCode.ValidationError) return { error: `Notion didn't accept that match: ${err.message}` };
+    if (err.code === APIErrorCode.ValidationError) return { error: `Notion didn't accept that ${what}: ${err.message}` };
   }
-  return { error: `Couldn't reach Notion, so nothing was ${verb === "add" ? "saved" : "removed"}. Try again in a moment.` };
+  return { error: `Couldn't reach Notion, so the ${what} wasn't saved. Try again in a moment.` };
 };
 
 /** Returns { ok: true } or { error, field? }. */
@@ -30,13 +30,19 @@ export async function addMatch(formData) {
   const denied = checkPasscode(formData.get("passcode"));
   if (denied) return denied;
 
-  const parsed = parseMatchInput((k) => formData.get(k));
+  let meta;
+  try {
+    meta = await getMeta();
+  } catch (err) {
+    return notionError(err, "match");
+  }
+  const parsed = parseMatchInput((k) => formData.get(k), (k) => formData.getAll(k), meta);
   if (parsed.error) return parsed;
 
   try {
     await createMatchPage(parsed.match);
   } catch (err) {
-    return notionError(err, "add");
+    return notionError(err, "match");
   }
   revalidatePath("/");
   return { ok: true };
@@ -46,12 +52,26 @@ export async function removeMatch(pageId, passcode) {
   const denied = checkPasscode(passcode);
   if (denied) return denied;
   if (!/^[0-9a-f-]{32,36}$/i.test(String(pageId))) return { error: "That match id doesn't look right." };
-
   try {
     await trashMatchPage(pageId);
   } catch (err) {
-    return notionError(err, "remove");
+    return notionError(err, "removal");
   }
   revalidatePath("/");
   return { ok: true };
+}
+
+/** Returns { id } of the new deck or { error, field? }. */
+export async function addDeck(formData) {
+  const denied = checkPasscode(formData.get("passcode"));
+  if (denied) return denied;
+  const parsed = parseDeckInput((k) => formData.get(k), (k) => formData.getAll(k));
+  if (parsed.error) return parsed;
+  try {
+    const page = await createDeckPage(parsed.deck);
+    revalidatePath("/");
+    return { id: page.id };
+  } catch (err) {
+    return notionError(err, "deck");
+  }
 }
