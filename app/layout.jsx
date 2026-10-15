@@ -2,12 +2,12 @@ import "./globals.css";
 import PWA from "@/components/PWA";
 
 export const metadata = {
-  title: "Pickpocket Match Log",
+  title: "MTG Standard Deck Stats Tracker",
   description: "Log Bo3 matches, track win rates by matchup, and read Claude's deck notes.",
   manifest: "/manifest.webmanifest",
-  applicationName: "Match Log",
+  applicationName: "MTG Standard Deck Stats Tracker",
   icons: { icon: "/favicon.png", apple: "/apple-touch-icon.png" },
-  appleWebApp: { capable: true, title: "Match Log", statusBarStyle: "black-translucent" },
+  appleWebApp: { capable: true, title: "Deck Stats", statusBarStyle: "black-translucent" },
   formatDetection: { telephone: false },
 };
 

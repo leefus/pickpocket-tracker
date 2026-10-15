@@ -58,7 +58,7 @@ export default function PWA() {
   return (
     <div className="install" role="dialog" aria-label="Install the app">
       <div>
-        <b>Put the match log on your home screen</b>
+        <b>Put Deck Stats on your home screen</b>
         <p>{ios ? "In Safari, tap Share, then Add to Home Screen." : "Opens like an app and shows your last stats with no signal."}</p>
       </div>
       {!ios && (

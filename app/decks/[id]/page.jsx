@@ -13,9 +13,9 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }) {
   try {
     const deck = (await getDecks()).find((d) => d.id === params.id);
-    return { title: deck ? `${deck.name} · Match Log` : "Deck · Match Log" };
+    return { title: deck ? `${deck.name} · Deck Stats` : "MTG Standard Deck Stats Tracker" };
   } catch {
-    return { title: "Deck · Match Log" };
+    return { title: "MTG Standard Deck Stats Tracker" };
   }
 }
 

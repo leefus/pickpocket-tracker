@@ -122,7 +122,7 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
           <p className="crumb">
             <Link href="/">← All decks</Link>
           </p>
-          <p className="eyebrow">Match log</p>
+          <p className="eyebrow">MTG Standard Deck Stats Tracker</p>
           <h1>{deck?.name ?? "No deck yet"}</h1>
           {deck && (
             <p className="sub">

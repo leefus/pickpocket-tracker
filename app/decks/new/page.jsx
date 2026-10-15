@@ -3,7 +3,7 @@ import DeckForm from "@/components/DeckForm";
 import { canWrite } from "@/lib/notion";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Add a deck · Pickpocket Match Log" };
+export const metadata = { title: "Add a deck · MTG Standard Deck Stats Tracker" };
 
 export default function NewDeckPage() {
   return (

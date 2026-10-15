@@ -1,4 +1,6 @@
-# Pickpocket Match Log
+# MTG Standard Deck Stats Tracker
+
+(Formerly Pickpocket Match Log. The Notion databases keep their original names.)
 
 Bo3 match tracker for MTG decks under test. Next.js 14 on Vercel, with
 decks and matches stored in two Notion databases (same pattern as

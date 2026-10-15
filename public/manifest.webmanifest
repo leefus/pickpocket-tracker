@@ -1,7 +1,7 @@
 {
-  "name": "Pickpocket Match Log",
-  "short_name": "Match Log",
-  "description": "Log Bo3 matches, track win rates by matchup, and read Claude's deck notes.",
+  "name": "MTG Standard Deck Stats Tracker",
+  "short_name": "Deck Stats",
+  "description": "Track Standard decks: pre-test math, synergy graphs, plan profiles, Bo3 match results and Claude's deck reviews.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

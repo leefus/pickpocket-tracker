@@ -1,5 +1,5 @@
 /**
- * Pickpocket Match Log — service worker.
+ * MTG Standard Deck Stats Tracker — service worker.
  *
  * Goal: the app opens instantly from the home screen and still shows your
  * last-loaded stats and decklist with no signal (say, at the LGS). Saving a
@@ -12,7 +12,7 @@
  *
  * Bump VERSION to evict everything on the next visit.
  */
-const VERSION = "v1";
+const VERSION = "v2";
 const STATIC = `pickpocket-static-${VERSION}`;
 const PAGES = `pickpocket-pages-${VERSION}`;
 const OFFLINE_URL = "/offline";
