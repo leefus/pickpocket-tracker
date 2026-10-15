@@ -3,12 +3,13 @@
 import { useMemo, useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { addMatch, removeMatch } from "@/app/actions";
+import { addMatch, removeMatch, requestAnalysis } from "@/app/actions";
 import { deadCardChoices, parseGuide, parseList } from "@/lib/decklist.mjs";
 import { ARCHETYPES, COLORS, EVENTS, NOT_IN_META, colorCode } from "@/lib/meta.mjs";
 import { opponentLabel, pct, summarize, won, worstFromGuide } from "@/lib/stats.mjs";
 import { PasscodeRow, usePasscode } from "./usePasscode";
 import GraphPanel from "./GraphPanel";
+import PretestPanel from "./PretestPanel";
 
 const today = () => {
   const d = new Date();
@@ -22,7 +23,7 @@ const fmtDate = (iso) => {
   return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
 };
 
-export default function Tracker({ deck, decks, meta, matches, writable, connected, missing = [], loadError }) {
+export default function Tracker({ deck, decks, meta, matches, report = null, cardError = null, isNew = false, writable, connected, missing = [], loadError }) {
   const router = useRouter();
   const formRef = useRef(null);
   const pc = usePasscode();
@@ -31,6 +32,7 @@ export default function Tracker({ deck, decks, meta, matches, writable, connecte
   const [badField, setBadField] = useState(null);
   const [opponent, setOpponent] = useState(meta[0] ?? NOT_IN_META);
   const [confirmId, setConfirmId] = useState(null);
+  const [reqMsg, setReqMsg] = useState(null);
 
   const guide = useMemo(() => parseGuide(deck?.guide), [deck?.guide]);
   const s = useMemo(
@@ -73,6 +75,20 @@ export default function Tracker({ deck, decks, meta, matches, writable, connecte
     });
   }
 
+  function onRequest() {
+    setMsg(null);
+    startTransition(async () => {
+      const res = await requestAnalysis(deck.id, pc.passcode);
+      if (res?.error) {
+        setReqMsg({ text: res.error, err: true });
+        return;
+      }
+      pc.keep();
+      setReqMsg({ text: "Sent. Claude picks it up within about an hour." });
+      router.refresh();
+    });
+  }
+
   function onRemove(id) {
     startTransition(async () => {
       const res = await removeMatch(id, pc.passcode);
@@ -102,6 +118,9 @@ export default function Tracker({ deck, decks, meta, matches, writable, connecte
     <div className="wrap">
       <header className="top">
         <div>
+          <p className="crumb">
+            <Link href="/">← All decks</Link>
+          </p>
           <p className="eyebrow">Match log</p>
           <h1>{deck?.name ?? "No deck yet"}</h1>
           {deck && (
@@ -114,7 +133,7 @@ export default function Tracker({ deck, decks, meta, matches, writable, connecte
           {decks.length > 1 && (
             <label>
               Deck
-              <select id="deck-switch" value={deck?.id ?? ""} onChange={(e) => router.push(`/?deck=${e.target.value}`)}>
+              <select id="deck-switch" value={deck?.id ?? ""} onChange={(e) => router.push(`/decks/${e.target.value}`)}>
                 {decks.map((d) => (
                   <option key={d.id} value={d.id}>
                     {d.name}
@@ -140,6 +159,13 @@ export default function Tracker({ deck, decks, meta, matches, writable, connecte
       {connected && !deck && !loadError && (
         <div className="banner">
           No decks yet. <Link href="/decks/new">Add your first deck</Link> to start logging matches.
+        </div>
+      )}
+
+      {deck && isNew && (
+        <div className="banner good">
+          <b>Deck saved and sent to Claude.</b> The pre-test report below is ready now. Claude&apos;s written review and synergy edges arrive
+          within about an hour; this page shows them when they do.
         </div>
       )}
 
@@ -172,11 +198,26 @@ export default function Tracker({ deck, decks, meta, matches, writable, connecte
               </>
             ) : (
               <p className="msg">
-                No review yet. Claude reads this deck&apos;s matches from Notion once a day and writes adjustment notes here once there
-                are new matches to look at.
+                No review yet. Claude writes a pre-test review when a deck is added, then reads its matches once a day and writes
+                adjustment notes here.
               </p>
             )}
+            <div className="claude-line">
+              {deck.analysisRequested ? (
+                <span className="pill warn">Sent to Claude {fmtDate(deck.requestedAt)} · review due within about an hour</span>
+              ) : (
+                <>
+                  <button type="button" className="ghost" onClick={onRequest} disabled={!writable || pending || !pc.passcode}>
+                    Ask Claude to re-check this deck
+                  </button>
+                  {writable && !pc.passcode && <span>Enter your passcode in the match form first.</span>}
+                </>
+              )}
+              {reqMsg && <span className={reqMsg.err ? "msg err" : "msg"}>{reqMsg.text}</span>}
+            </div>
           </section>
+
+          <PretestPanel report={report} error={cardError} open={isNew || n === 0} />
 
           <section>
             <h2>By opponent</h2>

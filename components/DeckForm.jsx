@@ -34,7 +34,7 @@ export default function DeckForm({ writable }) {
         return;
       }
       pc.keep();
-      router.push(`/?deck=${res.id}`);
+      router.push(`/decks/${res.id}?new=1`);
       router.refresh();
     });
   }

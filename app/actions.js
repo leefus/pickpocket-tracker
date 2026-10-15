@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { APIErrorCode, isNotionClientError } from "@notionhq/client";
-import { canWrite, createDeckPage, createMatchPage, getMeta, trashMatchPage } from "@/lib/notion";
+import { canWrite, createDeckPage, createMatchPage, getMeta, requestAnalysisPage, trashMatchPage } from "@/lib/notion";
 import { parseDeckInput, parseMatchInput } from "@/lib/mapping.mjs";
 
 const checkPasscode = (given) => {
@@ -44,7 +44,7 @@ export async function addMatch(formData) {
   } catch (err) {
     return notionError(err, "match");
   }
-  revalidatePath("/");
+  revalidatePath("/", "layout");
   return { ok: true };
 }
 
@@ -57,7 +57,7 @@ export async function removeMatch(pageId, passcode) {
   } catch (err) {
     return notionError(err, "removal");
   }
-  revalidatePath("/");
+  revalidatePath("/", "layout");
   return { ok: true };
 }
 
@@ -69,9 +69,23 @@ export async function addDeck(formData) {
   if (parsed.error) return parsed;
   try {
     const page = await createDeckPage(parsed.deck);
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     return { id: page.id };
   } catch (err) {
     return notionError(err, "deck");
   }
+}
+
+/** Flag a deck for Claude's pre-test review. Returns { ok: true } or { error }. */
+export async function requestAnalysis(deckId, passcode) {
+  const denied = checkPasscode(passcode);
+  if (denied) return denied;
+  if (!/^[0-9a-f-]{32,36}$/i.test(String(deckId))) return { error: "That deck id doesn't look right." };
+  try {
+    await requestAnalysisPage(deckId);
+  } catch (err) {
+    return notionError(err, "request");
+  }
+  revalidatePath("/", "layout");
+  return { ok: true };
 }

@@ -13,8 +13,18 @@ hathcocked-recipes).
 - **The meta list** is the options of the match log's *Opponent* select in
   Notion. Add, rename or reorder options there; the first five always show in
   the opponent table. Keep *Not in meta* as an option.
-- **Claude's deck notes**: a daily Claude review reads new matches and writes
-  adjustment notes into the deck's *Claude Review* field, which the app shows.
+- **Start page** (`/`): pick a deck or add a new one. Each deck has its own
+  page at `/decks/<id>`; old `/?deck=<id>` links redirect there.
+- **Pre-test report**: on every deck page, computed from the decklist plus
+  Scryfall card data (`lib/pretest.mjs`, cached for a week): curve, colored
+  sources and Karsten-style casting odds, how each land enters, opening-hand
+  land counts, removal count, and a check that each sideboard plan balances.
+  It opens automatically for a new deck or one with no matches.
+- **Claude's deck notes**: saving a new deck (or pressing *Ask Claude to
+  re-check*) ticks *Analysis Requested* in Notion. An hourly Claude task in
+  the project writes a pre-test review and synergy edges, then unticks it.
+  A daily task reviews new matches. Both write the *Claude Review* field,
+  which the app shows.
 
 Reads are public; adding decks or matches, and removing matches, needs
 `TRACKER_PASSCODE`. Removing a match moves its Notion row to the trash.

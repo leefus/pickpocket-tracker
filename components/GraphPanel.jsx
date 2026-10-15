@@ -54,8 +54,8 @@ export default function GraphPanel({ deck, matches }) {
       <section>
         <h2>Synergy graph</h2>
         <p className="msg">
-          No synergy edges for this deck yet. Add them in Notion (Pickpocket Decks → Synergy Edges), one per line as{" "}
-          <code>Card A -- Card B | why</code>, or ask Claude in the project to generate them from the decklist.
+          No synergy edges for this deck yet. Claude adds them with its pre-test review. You can also write them in Notion (Pickpocket
+          Decks → Synergy Edges), one per line as <code>Card A -- Card B | why</code>.
         </p>
       </section>
     );

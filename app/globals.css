@@ -126,3 +126,35 @@ code{font-family:var(--mono);font-size:.85em}
 .install>div{flex:1 1 220px;min-width:0}
 .install b{font-family:var(--display);font-size:1.05rem;letter-spacing:.02em}
 .install p{margin:2px 0 0;font-size:.85rem;color:var(--muted)}
+
+/* Pre-test report */
+details.pretest{display:flex;flex-direction:column;gap:14px;padding:14px 16px}
+details.pretest[open]>summary{margin-bottom:12px}
+details.pretest summary{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;list-style-position:outside}
+details.pretest summary h2{display:inline}
+details.pretest>*:not(summary)+*{margin-top:14px}
+.pretest h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0}
+.flags{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;max-width:85ch}
+.flags li{font-size:.92rem}
+.pt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.bars{display:flex;align-items:stretch;gap:6px;height:160px;padding:6px 4px 0}
+.vb{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0}
+.vb .bf{display:block;width:100%;max-width:38px;background:var(--gold);border-radius:3px 3px 0 0;min-height:1px}
+.vb.dim .bf{background:var(--muted);opacity:.45}
+.vb .bn{font-size:.75rem;color:var(--muted);margin-bottom:2px;min-height:1.1em}
+.vb .bt{flex:1 1 auto;width:100%;min-height:0;display:flex;align-items:flex-end;justify-content:center;border-bottom:1px solid var(--line)}
+.vb .bl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin-top:4px;line-height:1}
+
+/* Start page */
+.decklist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.deckcard{display:flex;flex-direction:column;gap:6px;height:100%;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;color:var(--ink);text-decoration:none}
+.deckcard:hover,.deckcard:focus-visible{border-color:var(--gold);outline:none}
+.deckcard b{font-family:var(--display);font-size:1.2rem;letter-spacing:.02em;line-height:1.2}
+.deckcard .sub{margin:0;font-size:.85rem}
+.deckcard .rec{font-family:var(--mono);font-size:.9rem;font-variant-numeric:tabular-nums}
+.deckcard.new{border-style:dashed;justify-content:center;align-items:flex-start;color:var(--gold)}
+.deckcard.retired{opacity:.7}
+.steps{margin:0;padding-left:20px;color:var(--muted);font-size:.92rem;max-width:70ch}
+.steps li{margin:2px 0}
+.claude-line{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
+.banner.good{border-left-color:var(--good)}

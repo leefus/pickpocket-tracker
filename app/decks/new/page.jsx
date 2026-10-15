@@ -10,12 +10,12 @@ export default function NewDeckPage() {
     <div className="wrap">
       <header>
         <p className="crumb">
-          <Link href="/">← Match log</Link>
+          <Link href="/">← All decks</Link>
         </p>
         <h1>Add a deck</h1>
         <p className="sub">
-          Paste the list from MTG Arena (Decks → Export). The tracker uses it for the deck view and the dead-card choices, and Claude
-          reads it from Notion when it reviews your matches.
+          Paste the list from MTG Arena (Decks → Export). When you save, the deck&apos;s page opens with a pre-test report (mana,
+          curve, opening hands, sideboard checks), and the deck goes to Claude in the project for a written review and synergy edges.
         </p>
       </header>
       <DeckForm writable={canWrite()} />
