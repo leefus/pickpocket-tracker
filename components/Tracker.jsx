@@ -11,6 +11,7 @@ import { PasscodeRow, usePasscode } from "./usePasscode";
 import GraphPanel from "./GraphPanel";
 import PretestPanel from "./PretestPanel";
 import PlanPanel from "./PlanPanel";
+import { HeaderBrand } from "./Brand";
 
 const today = () => {
   const d = new Date();
@@ -118,7 +119,7 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
   return (
     <div className="wrap">
       <header className="top">
-        <div>
+        <div className="titles">
           <p className="crumb">
             <Link href="/">← All decks</Link>
           </p>
@@ -148,6 +149,7 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
             Add a deck
           </Link>
         </nav>
+        <HeaderBrand />
       </header>
 
       {!connected && (

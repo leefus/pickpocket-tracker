@@ -12,7 +12,7 @@
  *
  * Bump VERSION to evict everything on the next visit.
  */
-const VERSION = "v2";
+const VERSION = "v3";
 const STATIC = `pickpocket-static-${VERSION}`;
 const PAGES = `pickpocket-pages-${VERSION}`;
 const OFFLINE_URL = "/offline";

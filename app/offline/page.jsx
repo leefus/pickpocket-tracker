@@ -1,9 +1,12 @@
+import Brand from "@/components/Brand";
+
 export const metadata = { title: "Offline · MTG Standard Deck Stats Tracker" };
 
 export default function Offline() {
   return (
     <div className="wrap">
-      <header>
+      <header className="center">
+        <Brand size={96} className="brand-c" />
         <p className="eyebrow">MTG Standard Deck Stats Tracker</p>
         <h1>No signal</h1>
         <p className="sub">

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getDecks, getMatchSummary, hasNotion, missingSettings } from "@/lib/notion";
 import { colorCode } from "@/lib/meta.mjs";
 import { pct } from "@/lib/stats.mjs";
+import { HeaderBrand } from "@/components/Brand";
 
 export const dynamic = "force-dynamic";
 
@@ -30,10 +31,13 @@ export default async function StartPage({ searchParams }) {
 
   return (
     <div className="wrap">
-      <header>
-        <p className="eyebrow">MTG Standard Deck Stats Tracker</p>
-        <h1>Pick a deck</h1>
-        <p className="sub">Open a deck to log matches, or add a new one. A new deck gets a pre-test report straight away, and Claude reviews it within about an hour.</p>
+      <header className="hdr">
+        <div>
+          <p className="eyebrow">MTG Standard Deck Stats Tracker</p>
+          <h1>Pick a deck</h1>
+          <p className="sub">Open a deck to log matches, or add a new one. A new deck gets a pre-test report straight away, and Claude reviews it within about an hour.</p>
+        </div>
+        <HeaderBrand />
       </header>
 
       {!connected && (
