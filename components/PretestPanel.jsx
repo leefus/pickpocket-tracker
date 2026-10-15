@@ -6,6 +6,7 @@ const ENTRY = {
   early: "Untapped on turns 1–3",
   late: "Tapped on turns 1–2",
   tapped: "Always tapped",
+  fetch: "Fetches a basic, tapped",
 };
 const PILL = { good: "good", warn: "warn", bad: "bad" };
 const WORD = { good: "On target", warn: "Borderline", bad: "Short" };

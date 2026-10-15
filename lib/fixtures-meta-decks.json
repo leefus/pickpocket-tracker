@@ -1,0 +1,18 @@
+{
+ "dimir": {
+  "main": "2 Bitter Triumph\n4 Dream Beavers\n4 Enduring Curiosity\n4 Floodpits Drowner\n4 Gloomlake Verge\n2 Hidden Lair\n4 Island\n4 Kaito, Bane of Nightmares\n4 Requiting Hex\n2 Restless Reef\n2 Shipwreck Marsh\n2 Shoot the Sheriff\n2 Soulstone Sanctuary\n1 Spell Snare\n4 Spyglass Siren\n4 Swamp\n2 The Wondrous Wasp\n1 Theorix Charm\n2 Tishana's Tidebinder\n4 Watery Grave\n2 We Say Thee Nay!",
+  "side": "1 Annul\n2 Day of Black Sun\n1 Disdainful Stroke\n3 Duress\n2 Flashfreeze\n1 Ghost Vacuum\n1 Nowhere to Run\n1 Raven Eagle\n3 Strategic Betrayal"
+ },
+ "landfall": {
+  "main": "3 Ba Sing Se\n1 Demolition Field\n4 Earthbender Ascension\n1 Elven Passage\n4 Escape Tunnel\n4 Esper Origins\n4 Fabled Passage\n14 Forest\n4 Icetill Explorer\n4 Llanowar Elves\n1 Lumbering Worldwagon\n2 Meltstrider's Resolve\n4 Mightform Harmonizer\n3 Sapling Nursery\n4 Sazh's Chocobo\n2 Shared Roots\n1 Surrak, Elusive Hunter",
+  "side": "2 Gigantic Big Bear\n1 Keen-Eyed Curator\n2 Meltstrider's Resolve\n4 Mossborn Hydra\n1 Sapling Nursery\n1 Surrak, Elusive Hunter\n2 Torpor Orb\n2 Warg Tactics"
+ },
+ "dragons": {
+  "main": "4 Burst Lightning\n3 Cavern of Souls\n4 Clarion Conqueror\n2 Erode\n4 Inspiring Vantage\n3 Maelstrom of the Spirit Dragon\n4 Magmatic Hellkite\n4 Momo, Friendly Flier\n1 Mountain\n4 Multiversal Passage\n4 Nova Hellkite\n1 Plains\n4 Sacred Foundry\n4 Sarkhan, Dragon Ascendant\n4 Smaug the Magnificent\n4 Sunbillow Verge\n2 Twinmaw Stormbrood\n4 Voice of Victory",
+  "side": "2 Boros Charm\n1 Dragonhawk, Fate's Tempest\n1 Get Lost\n1 Magda, the Hoardmaster\n2 Pyroclasm\n3 Rest in Peace\n4 Seam Rip\n1 Split Up"
+ },
+ "jund": {
+  "main": "1 Azog, Moria's Ruin\n4 Biotech Specialist\n3 Blazemire Verge\n2 Blood Crypt\n4 Blooming Marsh\n3 Callous Inspector\n2 Deadly Precision\n2 Fanatical Offering\n1 Forest\n4 Gene Pollinator\n4 Greedy Freebooter\n4 Lively Dirge\n1 Mutagen Man, Living Ooze\n4 Obsessive Pursuit\n4 Overgrown Tomb\n1 Requiting Hex\n1 Smaug the Magnificent\n4 Starting Town\n2 Stomping Ground\n1 Swamp\n4 The Sackville-Bagginses\n3 Umbral Collar Zealot\n1 Wastewood Verge",
+  "side": "3 Duress\n1 Guerrilla Gorilla\n1 Leatherhead, Swamp Stalker\n1 Requiting Hex\n2 Sentinel of the Nameless City\n1 Shoot the Sheriff\n2 Strategic Betrayal\n1 The Ooze\n1 Vengeful Tracker\n2 Vicious Rivalry"
+ }
+}
