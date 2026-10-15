@@ -4,6 +4,7 @@ import { canWrite, getDecks, getMatches, getMeta, hasNotion, missingSettings } f
 import { getCardData } from "@/lib/scryfall";
 import { pretest } from "@/lib/pretest.mjs";
 import { autoEdges } from "@/lib/autoedges.mjs";
+import { pressureTable, profileDeck, selfHarm } from "@/lib/axes.mjs";
 import { FALLBACK_META } from "@/lib/meta.mjs";
 
 // Matches change every time you log one; always read fresh from Notion.
@@ -53,6 +54,31 @@ export default async function DeckPage({ params, searchParams }) {
     if (!deck.edges && cards.cards.length) deck = { ...deck, edges: autoEdges(deck.main, cards.cards).text };
   }
 
+  // Plan profile, with matchup pressure worked out from every other active deck in the tracker.
+  let plan = null;
+  if (deck) {
+    try {
+      const active = decks.filter((d) => d.status !== "Retired" || d.id === deck.id);
+      const data = await Promise.all(active.map((d) => getCardData(d.main, d.side)));
+      const field = active
+        .map((d, i) => ({ name: d.name, id: d.id, profile: data[i].cards.length ? profileDeck(d.main, data[i].cards) : null }))
+        .filter((f) => f.profile);
+      const mine = field.find((f) => f.id === deck.id);
+      if (mine) {
+        const pressure = pressureTable(field);
+        const others = Object.fromEntries(Object.entries(pressure).filter(([n]) => n !== deck.name));
+        plan = {
+          profile: mine.profile,
+          field: field.map((f) => ({ name: f.name, win: f.profile.win, resources: f.profile.resources })),
+          pressure,
+          harm: selfHarm(mine.profile, others),
+        };
+      }
+    } catch (err) {
+      console.error("plan profile failed", err);
+    }
+  }
+
   return (
     <Tracker
       deck={deck}
@@ -60,6 +86,7 @@ export default async function DeckPage({ params, searchParams }) {
       meta={meta}
       matches={matches}
       report={report}
+      plan={plan}
       cardError={cardError}
       isNew={searchParams?.new === "1"}
       writable={canWrite()}

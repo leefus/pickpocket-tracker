@@ -26,6 +26,12 @@ hathcocked-recipes).
   `# Auto-generated` header. A deck with no edges at all (typed into Notion)
   gets the same graph on its page. Claude's hourly review replaces
   auto-generated edges with a reviewed, rule-based set.
+- **Plan profile**: what each card does for you and against the opponent
+  on seven axes (life, poison, mill, instant win; cards, board, tempo),
+  read from card text (`lib/axes.mjs`). It shows the deck's main win axis,
+  which of its costs are fuel, how hard every other deck in the tracker
+  pressures your life (worked out automatically), and whether each
+  self-harm cost is worth paying in each matchup.
 - **Claude's deck notes**: saving a new deck (or pressing *Ask Claude to
   re-check*) ticks *Analysis Requested* in Notion. An hourly Claude task in
   the project writes a pre-test review and synergy edges, then unticks it.

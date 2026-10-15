@@ -10,6 +10,11 @@
   "colors": [
    "R"
   ],
+  "power": null,
+  "toughness": null,
+  "keywords": [
+   "Kicker"
+  ],
   "card_faces": null
  },
  {
@@ -22,6 +27,11 @@
   "produced_mana": null,
   "colors": [
    "U"
+  ],
+  "power": "5",
+  "toughness": "5",
+  "keywords": [
+   "Flash"
   ],
   "card_faces": null
  },
@@ -36,33 +46,10 @@
   "colors": [
    "U"
   ],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
- },
- {
-  "name": "Hearth Elemental // Stoke Genius",
-  "layout": "adventure",
-  "mana_cost": "{5}{R} // {1}{R}",
-  "cmc": 6,
-  "type_line": "Creature — Elemental // Sorcery — Adventure",
-  "oracle_text": null,
-  "produced_mana": null,
-  "colors": [
-   "R"
-  ],
-  "card_faces": [
-   {
-    "name": "Hearth Elemental",
-    "mana_cost": "{5}{R}",
-    "type_line": "Creature — Elemental",
-    "oracle_text": "This spell costs {X} less to cast, where X is the number of cards in your graveyard that are instant cards, sorcery cards, and/or have an Adventure."
-   },
-   {
-    "name": "Stoke Genius",
-    "mana_cost": "{1}{R}",
-    "type_line": "Sorcery — Adventure",
-    "oracle_text": "Discard your hand, then draw two cards. (Then exile this card. You may cast the creature later from exile.)"
-   }
-  ]
  },
  {
   "name": "Impractical Joke",
@@ -75,6 +62,9 @@
   "colors": [
    "R"
   ],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -88,6 +78,9 @@
    "U"
   ],
   "colors": [],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -100,6 +93,11 @@
   "produced_mana": null,
   "colors": [
    "U"
+  ],
+  "power": null,
+  "toughness": null,
+  "keywords": [
+   "Scry"
   ],
   "card_faces": null
  },
@@ -115,6 +113,11 @@
    "R",
    "U"
   ],
+  "power": null,
+  "toughness": null,
+  "keywords": [
+   "Surveil"
+  ],
   "card_faces": null
  },
  {
@@ -129,6 +132,9 @@
    "U"
   ],
   "colors": [],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -142,6 +148,9 @@
   "colors": [
    "R"
   ],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -155,6 +164,9 @@
   "colors": [
    "U"
   ],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -168,6 +180,9 @@
   "colors": [
    "U"
   ],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -181,6 +196,9 @@
   "colors": [
    "U"
   ],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -195,6 +213,9 @@
    "U"
   ],
   "colors": [],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -209,6 +230,9 @@
    "U"
   ],
   "colors": [],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -223,6 +247,9 @@
    "U"
   ],
   "colors": [],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -235,6 +262,11 @@
   "produced_mana": null,
   "colors": [
    "U"
+  ],
+  "power": "5",
+  "toughness": "5",
+  "keywords": [
+   "Flying"
   ],
   "card_faces": null
  },
@@ -250,6 +282,11 @@
    "U"
   ],
   "colors": [],
+  "power": null,
+  "toughness": null,
+  "keywords": [
+   "Surveil"
+  ],
   "card_faces": null
  },
  {
@@ -264,6 +301,9 @@
    "R",
    "U"
   ],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -277,6 +317,9 @@
   "colors": [
    "U"
   ],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -291,6 +334,9 @@
    "R",
    "U"
   ],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -305,6 +351,13 @@
    "R",
    "U"
   ],
+  "power": "3",
+  "toughness": "3",
+  "keywords": [
+   "Haste",
+   "Ward",
+   "Opus"
+  ],
   "card_faces": null
  },
  {
@@ -318,6 +371,9 @@
   "colors": [
    "U"
   ],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -331,6 +387,9 @@
   "colors": [
    "U"
   ],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -342,6 +401,9 @@
   "oracle_text": "{T}: Exile target card from a graveyard.\n{6}, {T}, Sacrifice this artifact: Put each creature card exiled with this artifact onto the battlefield under your control with a flying counter on it. Each of them is a 1/1 Spirit in addition to its other types. Activate only as a sorcery.",
   "produced_mana": null,
   "colors": [],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -357,6 +419,9 @@
   "colors": [
    "U"
   ],
+  "power": "2",
+  "toughness": "2",
+  "keywords": [],
   "card_faces": null
  },
  {
@@ -369,6 +434,11 @@
   "produced_mana": null,
   "colors": [
    "U"
+  ],
+  "power": null,
+  "toughness": null,
+  "keywords": [
+   "Gift"
   ],
   "card_faces": null
  },
@@ -383,6 +453,42 @@
   "colors": [
    "R"
   ],
+  "power": null,
+  "toughness": null,
+  "keywords": [
+   "Spree"
+  ],
   "card_faces": null
+ },
+ {
+  "name": "Hearth Elemental // Stoke Genius",
+  "layout": "adventure",
+  "mana_cost": "{5}{R} // {1}{R}",
+  "cmc": 6,
+  "type_line": "Creature — Elemental // Sorcery — Adventure",
+  "oracle_text": null,
+  "produced_mana": null,
+  "colors": [
+   "R"
+  ],
+  "power": "4",
+  "toughness": "5",
+  "keywords": [],
+  "card_faces": [
+   {
+    "name": "Hearth Elemental",
+    "mana_cost": "{5}{R}",
+    "type_line": "Creature — Elemental",
+    "oracle_text": "This spell costs {X} less to cast, where X is the number of cards in your graveyard that are instant cards, sorcery cards, and/or have an Adventure.",
+    "power": "4",
+    "toughness": "5"
+   },
+   {
+    "name": "Stoke Genius",
+    "mana_cost": "{1}{R}",
+    "type_line": "Sorcery — Adventure",
+    "oracle_text": "Discard your hand, then draw two cards. (Then exile this card. You may cast the creature later from exile.)"
+   }
+  ]
  }
 ]

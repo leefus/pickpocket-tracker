@@ -6,9 +6,14 @@
   "cmc": 1,
   "type_line": "Legendary Creature — Human Cleric",
   "oracle_text": "Whenever another creature or planeswalker you control enters, you gain 1 life.\n{1}, {T}, Discard a card: Another target creature or planeswalker you control gains hexproof until end of turn.",
+  "produced_mana": null,
   "colors": [
    "W"
-  ]
+  ],
+  "power": "1",
+  "toughness": "1",
+  "keywords": [],
+  "card_faces": null
  },
  {
   "name": "Tinybones, the Pickpocket",
@@ -17,9 +22,16 @@
   "cmc": 1,
   "type_line": "Legendary Creature — Skeleton Rogue",
   "oracle_text": "Deathtouch\nWhenever Tinybones deals combat damage to a player, you may cast target nonland permanent card from that player's graveyard, and mana of any type can be spent to cast that spell.",
+  "produced_mana": null,
   "colors": [
    "B"
-  ]
+  ],
+  "power": "1",
+  "toughness": "1",
+  "keywords": [
+   "Deathtouch"
+  ],
+  "card_faces": null
  },
  {
   "name": "Rank Rat",
@@ -28,9 +40,14 @@
   "cmc": 2,
   "type_line": "Creature — Zombie Rat",
   "oracle_text": "When this creature enters, each opponent discards a card.",
+  "produced_mana": null,
   "colors": [
    "B"
-  ]
+  ],
+  "power": "1",
+  "toughness": "1",
+  "keywords": [],
+  "card_faces": null
  },
  {
   "name": "Black Widow, Super Spy",
@@ -39,9 +56,16 @@
   "cmc": 2,
   "type_line": "Legendary Creature — Human Spy Hero",
   "oracle_text": "Menace\nWhenever Black Widow deals combat damage to a player, that player exiles cards from the top of their library until they exile a nonland card. You may put a +1/+1 counter on Black Widow. If you don't, you may cast the exiled nonland card until end of turn and mana of any type can be spent to cast that spell.",
+  "produced_mana": null,
   "colors": [
    "B"
-  ]
+  ],
+  "power": "2",
+  "toughness": "1",
+  "keywords": [
+   "Menace"
+  ],
+  "card_faces": null
  },
  {
   "name": "Reno and Rude",
@@ -50,9 +74,16 @@
   "cmc": 2,
   "type_line": "Legendary Creature — Human Assassin",
   "oracle_text": "Menace\nWhenever Reno and Rude deals combat damage to a player, exile the top card of that player's library. Then you may sacrifice another creature or artifact. If you do, you may play the exiled card this turn, and mana of any type can be spent to cast it.",
+  "produced_mana": null,
   "colors": [
    "B"
-  ]
+  ],
+  "power": "2",
+  "toughness": "1",
+  "keywords": [
+   "Menace"
+  ],
+  "card_faces": null
  },
  {
   "name": "Nita, Forum Conciliator",
@@ -61,10 +92,15 @@
   "cmc": 3,
   "type_line": "Legendary Creature — Human Advisor",
   "oracle_text": "Whenever you cast a spell you don't own, put a +1/+1 counter on each creature you control.\n{2}, Sacrifice another creature: Exile target instant or sorcery card from an opponent's graveyard. You may cast it this turn, and mana of any type can be spent to cast that spell. If that spell would be put into a graveyard, exile it instead. Activate only as a sorcery.",
+  "produced_mana": null,
   "colors": [
    "B",
    "W"
-  ]
+  ],
+  "power": "2",
+  "toughness": "3",
+  "keywords": [],
+  "card_faces": null
  },
  {
   "name": "Ambrosia Whiteheart",
@@ -73,9 +109,17 @@
   "cmc": 2,
   "type_line": "Legendary Creature — Bird",
   "oracle_text": "Flash\nWhen Ambrosia Whiteheart enters, you may return another permanent you control to its owner's hand.\nLandfall — Whenever a land you control enters, Ambrosia Whiteheart gets +1/+0 until end of turn.",
+  "produced_mana": null,
   "colors": [
    "W"
-  ]
+  ],
+  "power": "2",
+  "toughness": "2",
+  "keywords": [
+   "Flash",
+   "Landfall"
+  ],
+  "card_faces": null
  },
  {
   "name": "Tinybones, Pocket Nuisance",
@@ -84,9 +128,14 @@
   "cmc": 3,
   "type_line": "Legendary Creature — Skeleton Rogue",
   "oracle_text": "When Tinybones enters, each opponent discards a card.\nWhenever a player discards one or more cards, Tinybones deals 1 damage to each opponent.",
+  "produced_mana": null,
   "colors": [
    "B"
-  ]
+  ],
+  "power": "2",
+  "toughness": "1",
+  "keywords": [],
+  "card_faces": null
  },
  {
   "name": "Rescue Girl, First Responder",
@@ -95,9 +144,16 @@
   "cmc": 3,
   "type_line": "Legendary Creature — Human Cleric",
   "oracle_text": "Flying\n{T}: Return another target permanent you control to its owner's hand. Activate only during your turn.",
+  "produced_mana": null,
   "colors": [
    "W"
-  ]
+  ],
+  "power": "1",
+  "toughness": "3",
+  "keywords": [
+   "Flying"
+  ],
+  "card_faces": null
  },
  {
   "name": "Hostile Investigator",
@@ -106,9 +162,16 @@
   "cmc": 4,
   "type_line": "Creature — Ogre Rogue Detective",
   "oracle_text": "When this creature enters, target opponent discards a card.\nWhenever one or more players discard one or more cards, investigate. This ability triggers only once each turn. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")",
+  "produced_mana": null,
   "colors": [
    "B"
-  ]
+  ],
+  "power": "4",
+  "toughness": "3",
+  "keywords": [
+   "Investigate"
+  ],
+  "card_faces": null
  },
  {
   "name": "Tinybones Joins Up",
@@ -117,9 +180,16 @@
   "cmc": 1,
   "type_line": "Legendary Enchantment",
   "oracle_text": "When Tinybones Joins Up enters, any number of target players each discard a card.\nWhenever a legendary creature you control enters, any number of target players each mill a card and lose 1 life.",
+  "produced_mana": null,
   "colors": [
    "B"
-  ]
+  ],
+  "power": null,
+  "toughness": null,
+  "keywords": [
+   "Mill"
+  ],
+  "card_faces": null
  },
  {
   "name": "The Seriema",
@@ -128,9 +198,16 @@
   "cmc": 3,
   "type_line": "Legendary Artifact — Spacecraft",
   "oracle_text": "When The Seriema enters, search your library for a legendary creature card, reveal it, put it into your hand, then shuffle.\nStation (Tap another creature you control: Put charge counters equal to its power on this Spacecraft. Station only as a sorcery. It's an artifact creature at 7+.)\n7+ | Flying\nOther tapped legendary creatures you control have indestructible.",
+  "produced_mana": null,
   "colors": [
    "W"
-  ]
+  ],
+  "power": "5",
+  "toughness": "5",
+  "keywords": [
+   "Station"
+  ],
+  "card_faces": null
  },
  {
   "name": "Lich's Relic",
@@ -139,9 +216,16 @@
   "cmc": 1,
   "type_line": "Artifact — Equipment",
   "oracle_text": "When this Equipment enters, you may pay {2}. When you do, for each opponent, destroy up to one target creature or planeswalker that player controls.\nEquipped creature gets +2/+1.\nEquip {2}",
+  "produced_mana": null,
   "colors": [
    "B"
-  ]
+  ],
+  "power": null,
+  "toughness": null,
+  "keywords": [
+   "Equip"
+  ],
+  "card_faces": null
  },
  {
   "name": "Sheltered by Ghosts",
@@ -150,9 +234,16 @@
   "cmc": 2,
   "type_line": "Enchantment — Aura",
   "oracle_text": "Enchant creature you control\nWhen this Aura enters, exile target nonland permanent an opponent controls until this Aura leaves the battlefield.\nEnchanted creature gets +1/+0 and has lifelink and ward {2}.",
+  "produced_mana": null,
   "colors": [
    "W"
-  ]
+  ],
+  "power": null,
+  "toughness": null,
+  "keywords": [
+   "Enchant"
+  ],
+  "card_faces": null
  },
  {
   "name": "Bitter Triumph",
@@ -161,9 +252,14 @@
   "cmc": 2,
   "type_line": "Instant",
   "oracle_text": "As an additional cost to cast this spell, discard a card or pay 3 life.\nDestroy target creature or planeswalker.",
+  "produced_mana": null,
   "colors": [
    "B"
-  ]
+  ],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
+  "card_faces": null
  },
  {
   "name": "Godless Shrine",
@@ -176,7 +272,11 @@
    "B",
    "W"
   ],
-  "colors": []
+  "colors": [],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
+  "card_faces": null
  },
  {
   "name": "Concealed Courtyard",
@@ -189,7 +289,11 @@
    "B",
    "W"
   ],
-  "colors": []
+  "colors": [],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
+  "card_faces": null
  },
  {
   "name": "Shattered Sanctum",
@@ -202,7 +306,11 @@
    "B",
    "W"
   ],
-  "colors": []
+  "colors": [],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
+  "card_faces": null
  },
  {
   "name": "Bleachbone Verge",
@@ -215,7 +323,11 @@
    "B",
    "W"
   ],
-  "colors": []
+  "colors": [],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
+  "card_faces": null
  },
  {
   "name": "Multiversal Passage",
@@ -224,7 +336,12 @@
   "cmc": 0,
   "type_line": "Land",
   "oracle_text": "As this land enters, choose a basic land type. Then you may pay 2 life. If you don't, it enters tapped.\nThis land is the chosen type.",
-  "colors": []
+  "produced_mana": null,
+  "colors": [],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
+  "card_faces": null
  },
  {
   "name": "Swamp",
@@ -236,7 +353,11 @@
   "produced_mana": [
    "B"
   ],
-  "colors": []
+  "colors": [],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
+  "card_faces": null
  },
  {
   "name": "Plains",
@@ -248,7 +369,11 @@
   "produced_mana": [
    "W"
   ],
-  "colors": []
+  "colors": [],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
+  "card_faces": null
  },
  {
   "name": "Get Lost",
@@ -257,9 +382,16 @@
   "cmc": 2,
   "type_line": "Instant",
   "oracle_text": "Destroy target creature, enchantment, or planeswalker. Its controller creates two Map tokens. (They're artifacts with \"{1}, {T}, Sacrifice this token: Target creature you control explores. Activate only as a sorcery.\")",
+  "produced_mana": null,
   "colors": [
    "W"
-  ]
+  ],
+  "power": null,
+  "toughness": null,
+  "keywords": [
+   "Explore"
+  ],
+  "card_faces": null
  },
  {
   "name": "Clarion Conqueror",
@@ -268,29 +400,16 @@
   "cmc": 3,
   "type_line": "Creature — Dragon",
   "oracle_text": "Flying\nActivated abilities of artifacts, creatures, and planeswalkers can't be activated.",
+  "produced_mana": null,
   "colors": [
    "W"
-  ]
- },
- {
-  "name": "Tithing Blade // Consuming Sepulcher",
-  "layout": "transform",
-  "mana_cost": "{1}{B}",
-  "cmc": 2,
-  "type_line": "Artifact // Artifact",
-  "oracle_text": "When this artifact enters, each opponent sacrifices a creature of their choice.\nCraft with creature {4}{B} ({4}{B}, Exile this artifact, Exile a creature you control or a creature card from your graveyard: Return this card transformed under its owner's control. Craft only as a sorcery.)\n//\nAt the beginning of your upkeep, each opponent loses 1 life and you gain 1 life.",
-  "card_faces": [
-   {
-    "name": "Tithing Blade",
-    "mana_cost": "{1}{B}",
-    "type_line": "Artifact"
-   },
-   {
-    "name": "Consuming Sepulcher",
-    "mana_cost": "",
-    "type_line": "Artifact"
-   }
-  ]
+  ],
+  "power": "3",
+  "toughness": "3",
+  "keywords": [
+   "Flying"
+  ],
+  "card_faces": null
  },
  {
   "name": "Shoot the Sheriff",
@@ -299,9 +418,14 @@
   "cmc": 2,
   "type_line": "Instant",
   "oracle_text": "Destroy target non-outlaw creature. (Assassins, Mercenaries, Pirates, Rogues, and Warlocks are outlaws. Everyone else is fair game.)",
+  "produced_mana": null,
   "colors": [
    "B"
-  ]
+  ],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
+  "card_faces": null
  },
  {
   "name": "Duress",
@@ -310,9 +434,14 @@
   "cmc": 1,
   "type_line": "Sorcery",
   "oracle_text": "Target opponent reveals their hand. You choose a noncreature, nonland card from it. That player discards that card.",
+  "produced_mana": null,
   "colors": [
    "B"
-  ]
+  ],
+  "power": null,
+  "toughness": null,
+  "keywords": [],
+  "card_faces": null
  },
  {
   "name": "Requiting Hex",
@@ -321,9 +450,16 @@
   "cmc": 1,
   "type_line": "Instant",
   "oracle_text": "As an additional cost to cast this spell, you may blight 1. (You may put a -1/-1 counter on a creature you control.)\nDestroy target creature with mana value 2 or less. If this spell's additional cost was paid, you gain 2 life.",
+  "produced_mana": null,
   "colors": [
    "B"
-  ]
+  ],
+  "power": null,
+  "toughness": null,
+  "keywords": [
+   "Blight"
+  ],
+  "card_faces": null
  },
  {
   "name": "Steel Hellkite",
@@ -332,6 +468,43 @@
   "cmc": 6,
   "type_line": "Artifact Creature — Dragon",
   "oracle_text": "Flying\n{2}: This creature gets +1/+0 until end of turn.\n{X}: Destroy each nonland permanent with mana value X whose controller was dealt combat damage by this creature this turn. Activate only once each turn.",
-  "colors": []
+  "produced_mana": null,
+  "colors": [],
+  "power": "5",
+  "toughness": "5",
+  "keywords": [
+   "Flying"
+  ],
+  "card_faces": null
+ },
+ {
+  "name": "Tithing Blade // Consuming Sepulcher",
+  "layout": "transform",
+  "mana_cost": null,
+  "cmc": 2,
+  "type_line": "Artifact // Artifact",
+  "oracle_text": null,
+  "produced_mana": null,
+  "colors": null,
+  "power": null,
+  "toughness": null,
+  "keywords": [
+   "Craft",
+   "Transform"
+  ],
+  "card_faces": [
+   {
+    "name": "Tithing Blade",
+    "mana_cost": "{1}{B}",
+    "type_line": "Artifact",
+    "oracle_text": "When this artifact enters, each opponent sacrifices a creature of their choice.\nCraft with creature {4}{B} ({4}{B}, Exile this artifact, Exile a creature you control or a creature card from your graveyard: Return this card transformed under its owner's control. Craft only as a sorcery.)"
+   },
+   {
+    "name": "Consuming Sepulcher",
+    "mana_cost": "",
+    "type_line": "Artifact",
+    "oracle_text": "At the beginning of your upkeep, each opponent loses 1 life and you gain 1 life."
+   }
+  ]
  }
 ]
