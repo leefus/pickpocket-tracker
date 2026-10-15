@@ -104,7 +104,7 @@ export default async function StartPage({ searchParams }) {
         <section className="jones">
           <h2>Jeffery Jones Fun Ranking</h2>
           <p className="sub small">
-            <i>Jeff&apos;s axiom:</i> a game only holds so much fun, so the more you have, the less your opponent does. Most un-fun first.
+            <i>Jeff&apos;s axiom:</i> a game only holds so much fun, so the more you have, the less your opponent does. Most un-fun (for your opponent) first.
           </p>
           <ol className="leaderboard">
             {ranking.map((r) => (
