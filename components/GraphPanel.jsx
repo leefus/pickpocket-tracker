@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { analyzeDeck, pSeen, shortLabels } from "@/lib/graph.mjs";
 import { pct } from "@/lib/stats.mjs";
 import { isAutoEdges } from "@/lib/autoedges.mjs";
+import { CardName } from "./CardInfo";
 
 const VIEW = 640;
 const R = 200;
@@ -259,9 +260,10 @@ export default function GraphPanel({ deck, matches = [], mode = "synergy" }) {
             {g.cards.map((c) => (
               <tr key={c.name} className={focus === c.name ? "sel" : undefined}>
                 <td>
-                  <button className="linkish" onClick={() => setFocus(focus === c.name ? null : c.name)}>
-                    {c.name}
-                  </button>
+                  <button className="focusdot" onClick={() => setFocus(focus === c.name ? null : c.name)} aria-label={`Highlight ${c.name} in the graph`} aria-pressed={focus === c.name} title="Highlight in the graph">
+                    ◎
+                  </button>{" "}
+                  <CardName name={c.name} />
                 </td>
                 <td className="r num">{c.copies}</td>
                 <td className="r num">{c.degree}</td>

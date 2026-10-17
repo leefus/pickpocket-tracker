@@ -1,4 +1,5 @@
 import { KILL_EQUIV, RESOURCE_AXES, WIN_AXES } from "@/lib/axes.mjs";
+import { CardName } from "./CardInfo";
 
 const pc = (x) => `${Math.round(100 * x)}%`;
 const COST_WORD = { life: "life", discard: "a discard", sacrifice: "a sacrifice" };
@@ -113,7 +114,7 @@ export default function PlanPanel({ plan, deckName }) {
             <tbody>
               {harm.map((h) => (
                 <tr key={h.name}>
-                  <td>{h.name}</td>
+                  <td><CardName name={h.name} /></td>
                   <td>{h.costs.map((c) => fmtCost(c) + (c.optional ? " (optional)" : "")).join(" or ")}</td>
                   {opponents.map(([n]) => {
                     const v = h.vs.find((x) => x.opp === n);
@@ -163,7 +164,7 @@ export default function PlanPanel({ plan, deckName }) {
               {profile.cards.map((c) => (
                 <tr key={c.name}>
                   <td>
-                    {c.qty} {c.name}
+                    {c.qty} <CardName name={c.name} />
                   </td>
                   {[...WIN_AXES, ...RESOURCE_AXES].map((a) => {
                     const v = c.axes[a.id];

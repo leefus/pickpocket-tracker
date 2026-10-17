@@ -200,3 +200,24 @@ details.cardscores .tbl{margin-top:10px}
 .leaderboard .ix{text-align:right}
 .leaderboard .ab{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
 .leaderboard .ab i{display:block;height:100%;background:var(--bad);border-radius:5px}
+
+/* Card viewer: tap a card name to see the card */
+button.cardlink{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-align:left;text-decoration:underline dotted var(--muted);text-underline-offset:3px;border-radius:2px}
+button.cardlink:hover{text-decoration-style:solid}
+button.cardlink:focus-visible,button.focusdot:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+button.focusdot{background:none;border:0;padding:0 2px;font-size:.85rem;color:var(--muted);cursor:pointer}
+button.focusdot[aria-pressed="true"]{color:var(--ink)}
+.cardmodal{position:fixed;inset:0;z-index:50;background:rgba(10,9,8,.6);display:flex;align-items:center;justify-content:center;padding:16px}
+.cardsheet{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;width:min(400px,100%);max-height:calc(100dvh - 32px);overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.cardhead{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.cardhead b{font-size:1rem}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{background:transparent;color:var(--muted);border:1px solid var(--line);padding:4px 12px;font-size:.8rem}
+.seg button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg button:disabled{opacity:.4;cursor:default}
+.seg .flip{margin-left:auto}
+.cardimg{width:100%;height:auto;border-radius:4.75% / 3.5%;display:block;aspect-ratio:488/680;background:var(--line)}
+.cardtext{display:flex;flex-direction:column;gap:12px}
+.cardtext .ctitle{display:flex;justify-content:space-between;gap:8px}
+.cardtext .rules{white-space:pre-line;margin:6px 0 4px;line-height:1.45}
+.cardtext .otherface{opacity:.65}

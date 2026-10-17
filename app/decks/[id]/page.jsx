@@ -7,6 +7,7 @@ import { autoEdges } from "@/lib/autoedges.mjs";
 import { pressureTable, profileDeck, selfHarm } from "@/lib/axes.mjs";
 import { jonesField } from "@/lib/jones.mjs";
 import { FALLBACK_META } from "@/lib/meta.mjs";
+import { cardInfoMap } from "@/lib/cardinfo.mjs";
 
 // Matches change every time you log one; always read fresh from Notion.
 export const dynamic = "force-dynamic";
@@ -38,6 +39,7 @@ export default async function DeckPage({ params, searchParams }) {
 
   let report = null;
   let cardError = null;
+  let cardInfo = {};
   if (deck) {
     const [m, cards] = await Promise.all([
       getMatches(deck.id).catch((err) => {
@@ -49,6 +51,7 @@ export default async function DeckPage({ params, searchParams }) {
     ]);
     matches = m;
     cardError = cards.error ?? null;
+    cardInfo = cardInfoMap(cards.cards);
     if (cards.cards.length) report = pretest({ main: deck.main, side: deck.side, guide: deck.guide, cards: cards.cards });
     // A deck typed straight into Notion (or added before this existed) still gets a graph.
     // Shown only; nothing is written on a page view.
@@ -96,6 +99,7 @@ export default async function DeckPage({ params, searchParams }) {
       plan={plan}
       jones={jones}
       cardError={cardError}
+      cardInfo={cardInfo}
       isNew={searchParams?.new === "1"}
       writable={canWrite()}
       connected={hasNotion()}

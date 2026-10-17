@@ -1,4 +1,5 @@
 import { pct } from "@/lib/stats.mjs";
+import { CardName } from "./CardInfo";
 
 const ENTRY = {
   untapped: "Untapped",
@@ -121,7 +122,7 @@ export default function PretestPanel({ report: r, error, open }) {
                   </td>
                   <td className="r num">{c.cards}</td>
                   <td>
-                    {c.worst.name} <span className="sub small">· {c.worst.need} pip{c.worst.need > 1 ? "s" : ""} on turn {c.worst.turn}</span>
+                    <CardName name={c.worst.name} /> <span className="sub small">· {c.worst.need} pip{c.worst.need > 1 ? "s" : ""} on turn {c.worst.turn}</span>
                   </td>
                   <td className="r num">{pct(c.worst.p)}</td>
                   <td>
@@ -149,7 +150,7 @@ export default function PretestPanel({ report: r, error, open }) {
             <tbody>
               {r.landList.map((l) => (
                 <tr key={l.name}>
-                  <td>{l.name}</td>
+                  <td><CardName name={l.name} /></td>
                   <td className="r num">{l.qty}</td>
                   <td>{l.flex ? "One color, chosen as it enters" : l.colors.join(" ") || "Colorless"}</td>
                   <td>{ENTRY[l.entry]}</td>

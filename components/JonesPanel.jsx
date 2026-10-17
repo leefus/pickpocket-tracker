@@ -1,5 +1,6 @@
 import { CATEGORIES, TIERS } from "@/lib/jones.mjs";
 import GraphPanel from "./GraphPanel";
+import { CardName } from "./CardInfo";
 
 /**
  * The Jeffery Jones Fun Ranking for one deck.
@@ -59,7 +60,7 @@ export default function JonesPanel({ jones, deck }) {
             {offenders.map((c) => (
               <li key={c.name}>
                 <b>
-                  {c.qty} {c.name}
+                  {c.qty} <CardName name={c.name} />
                 </b>{" "}
                 <span className="sub">{c.why.join(", ")}</span>
               </li>

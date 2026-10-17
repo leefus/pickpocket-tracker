@@ -13,6 +13,8 @@ import PretestPanel from "./PretestPanel";
 import PlanPanel from "./PlanPanel";
 import JonesPanel from "./JonesPanel";
 import { HeaderBrand } from "./Brand";
+import { CardInfoProvider, CardName } from "./CardInfo";
+import { splitCardList } from "@/lib/cardinfo.mjs";
 
 const today = () => {
   const d = new Date();
@@ -26,7 +28,7 @@ const fmtDate = (iso) => {
   return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
 };
 
-export default function Tracker({ deck, decks, meta, matches, report = null, plan = null, jones = null, cardError = null, isNew = false, writable, connected, missing = [], loadError }) {
+export default function Tracker({ deck, decks, meta, matches, report = null, plan = null, jones = null, cardError = null, cardInfo = {}, isNew = false, writable, connected, missing = [], loadError }) {
   const router = useRouter();
   const formRef = useRef(null);
   const pc = usePasscode();
@@ -118,6 +120,7 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
   const offMeta = opponent === NOT_IN_META;
 
   return (
+    <CardInfoProvider cards={cardInfo}>
     <div className="wrap">
       <header className="top">
         <div className="titles">
@@ -387,7 +390,7 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
                   {s.deadCards.length ? (
                     s.deadCards.map((d) => (
                       <tr key={d.card}>
-                        <td>{d.card}</td>
+                        <td><CardName name={d.card} /></td>
                         <td className="r num">{d.count}</td>
                         <td className="r num">{pct(d.share)}</td>
                       </tr>
@@ -431,7 +434,7 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
                           {m.gamesWon}–{m.gamesLost}
                         </td>
                         <td className={won(m) ? "res-w" : "res-l"}>{won(m) ? "Win" : "Loss"}</td>
-                        <td>{m.deadCard ?? "—"}</td>
+                        <td>{m.deadCard ? <CardName name={m.deadCard} /> : "—"}</td>
                         <td>{m.notes ?? ""}</td>
                         <td>
                           {writable &&
@@ -473,7 +476,7 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
                   {main.cards.map((c) => (
                     <li key={c.name}>
                       <span>{c.qty}</span>
-                      <span>{c.name}</span>
+                      <CardName name={c.name} />
                     </li>
                   ))}
                 </ul>
@@ -484,7 +487,7 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
                   {side.cards.map((c) => (
                     <li key={c.name}>
                       <span>{c.qty}</span>
-                      <span>{c.name}</span>
+                      <CardName name={c.name} />
                     </li>
                   ))}
                 </ul>
@@ -504,8 +507,8 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
                     {guide.map((g) => (
                       <tr key={g.opp}>
                         <td>{g.opp}</td>
-                        <td>{g.ins}</td>
-                        <td>{g.outs}</td>
+                        <td><CardList text={g.ins} /></td>
+                        <td><CardList text={g.outs} /></td>
                       </tr>
                     ))}
                   </tbody>
@@ -517,5 +520,19 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
         </>
       )}
     </div>
+    </CardInfoProvider>
   );
+}
+
+/** "2 Kain, Traitorous Dragoon, 1 Liliana the Faultless" as tappable card names. */
+function CardList({ text }) {
+  const items = splitCardList(text);
+  if (!items.length) return <>{text}</>;
+  return items.map((it, i) => (
+    <span key={i}>
+      {i > 0 && ", "}
+      {it.qty != null && `${it.qty} `}
+      <CardName name={it.name} />
+    </span>
+  ));
 }
