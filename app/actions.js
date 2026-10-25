@@ -203,7 +203,7 @@ const allNames = new Set([...poolData.cards, ...landPool].map((c) => c.name.spli
 
 /** The seeds' colors and needs, before building. Read-only. */
 export async function lookupSeeds(seeds) {
-  const names = (Array.isArray(seeds) ? seeds : []).map(String).map((s) => s.trim()).filter(Boolean).slice(0, 6);
+  const names = (Array.isArray(seeds) ? seeds : []).map(String).map((s) => s.trim()).filter(Boolean).slice(0, 10);
   if (!names.length) return { error: "Name at least one seed card." };
   const info = seedInfo(names, poolData.cards);
   if (info.missing.length) return { ...info, error: `Not a Standard nonland card: ${info.missing.join(", ")}. Check the spelling.` };
@@ -212,7 +212,7 @@ export async function lookupSeeds(seeds) {
 
 /** Run the whole method from the seeds and return the 60 (nothing is saved). Read-only, so no passcode. */
 export async function buildSeedDeck({ seeds = [], colors = [], needs = [], removal = 4, twins = 0, refine = true } = {}) {
-  const names = seeds.map(String).map((s) => s.trim()).filter(Boolean).slice(0, 6);
+  const names = seeds.map(String).map((s) => s.trim()).filter(Boolean).slice(0, 10);
   if (!names.length) return { error: "Name at least one seed card." };
   const C = [...new Set(colors.map(String))].filter((c) => "WUBRG".includes(c) && c.length === 1);
   const N = [...new Set(needs.map(String))].filter((n) => /^[a-z0-9]+$/.test(n));

@@ -105,7 +105,7 @@ export default function SeedBuilder({ names, poolDate, writable }) {
             </div>
           ))}
           <div className="claude-line">
-            {seeds.length < 6 && (
+            {seeds.length < 10 && (
               <button type="button" className="ghost" onClick={() => setSeeds((x) => [...x, ""])}>
                 + Another seed
               </button>
