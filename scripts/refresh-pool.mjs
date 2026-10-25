@@ -9,16 +9,28 @@ const slim = (c) => {
   return o;
 };
 
-let url = "https://api.scryfall.com/cards/search?q=" + encodeURIComponent("f:standard -t:land") + "&unique=cards&order=name";
-const cards = [];
-while (url) {
-  const res = await fetch(url, { headers: { Accept: "application/json", "User-Agent": "MTGDeckStatsTracker/1.0" } });
-  if (!res.ok) throw new Error(`Scryfall answered ${res.status}`);
-  const j = await res.json();
-  cards.push(...j.data.map(slim));
-  url = j.has_more ? j.next_page : null;
-  await new Promise((r) => setTimeout(r, 120)); // Scryfall asks for at most 10 requests a second
+async function search(q, map) {
+  let url = "https://api.scryfall.com/cards/search?q=" + encodeURIComponent(q) + "&unique=cards&order=name";
+  const cards = [];
+  while (url) {
+    let res;
+    for (let tries = 0; tries < 5; tries++) {
+      res = await fetch(url, { headers: { Accept: "application/json", "User-Agent": "MTGDeckStatsTracker/1.0" } });
+      if (res.status !== 429) break;
+      await new Promise((r) => setTimeout(r, 2000 * (tries + 1))); // rate-limited: back off and retry
+    }
+    if (!res.ok) throw new Error(`Scryfall answered ${res.status}`);
+    const j = await res.json();
+    cards.push(...j.data.map(map));
+    url = j.has_more ? j.next_page : null;
+    await new Promise((r) => setTimeout(r, 250)); // Scryfall asks for at most 10 requests a second
+  }
+  return cards;
 }
-const out = { updated: new Date().toISOString().slice(0, 10), source: "Scryfall search f:standard -t:land", cards };
-fs.writeFileSync(new URL("../lib/data/standard-pool.json", import.meta.url), JSON.stringify(out));
-console.log(`${cards.length} cards, ${out.updated}`);
+const updated = new Date().toISOString().slice(0, 10);
+const cards = await search("f:standard -t:land", slim);
+fs.writeFileSync(new URL("../lib/data/standard-pool.json", import.meta.url), JSON.stringify({ updated, source: "Scryfall search f:standard -t:land", cards }));
+// Nonbasic lands, for the seed builder's mana base
+const lands = await search("f:standard t:land -t:basic", (c) => ({ ...slim(c), produced_mana: c.produced_mana ?? [] }));
+fs.writeFileSync(new URL("../lib/data/standard-lands.json", import.meta.url), JSON.stringify({ updated, source: "Scryfall search f:standard t:land -t:basic", cards: lands }));
+console.log(`${cards.length} cards, ${lands.length} lands, ${updated}`);

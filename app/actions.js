@@ -6,7 +6,9 @@ import { canWrite, createDeckPage, createMatchPage, getDecks, getMeta, requestAn
 import { parseDeckInput, parseMatchInput } from "@/lib/mapping.mjs";
 import { getCardData } from "@/lib/scryfall";
 import { autoEdges } from "@/lib/autoedges.mjs";
-import { checkDeck, parseList } from "@/lib/decklist.mjs";
+import { BASIC_LANDS, checkDeck, parseList } from "@/lib/decklist.mjs";
+import { runSeedBuild, seedInfo } from "@/lib/seedbuild.mjs";
+import landData from "@/lib/data/standard-lands.json";
 import { applySwaps } from "@/lib/roles.mjs";
 import { buildDeck, compareSwaps, killTurns, paired, summary } from "@/lib/goldfish.mjs";
 import poolData from "@/lib/data/standard-pool.json";
@@ -184,6 +186,77 @@ export async function saveSwapDeck(deckId, swaps, name, passcode) {
     gateMatches: d.deck.gateMatches,
     gateRate: d.deck.gateRate,
     notes: `Made from "${d.deck.name}" in the Roles panel: ${sw.map((x) => `${x.in} for ${x.out}`).join("; ")}.`,
+  };
+  try {
+    const page = await createDeckPage(deck);
+    revalidatePath("/", "layout");
+    return { id: page.id };
+  } catch (err) {
+    return notionError(err, "deck");
+  }
+}
+
+/* ------------------------------------------------------------------ build from seeds */
+
+const landPool = landData.cards;
+const allNames = new Set([...poolData.cards, ...landPool].map((c) => c.name.split(" // ")[0]));
+
+/** The seeds' colors and needs, before building. Read-only. */
+export async function lookupSeeds(seeds) {
+  const names = (Array.isArray(seeds) ? seeds : []).map(String).map((s) => s.trim()).filter(Boolean).slice(0, 6);
+  if (!names.length) return { error: "Name at least one seed card." };
+  const info = seedInfo(names, poolData.cards);
+  if (info.missing.length) return { ...info, error: `Not a Standard nonland card: ${info.missing.join(", ")}. Check the spelling.` };
+  return info;
+}
+
+/** Run the whole method from the seeds and return the 60 (nothing is saved). Read-only, so no passcode. */
+export async function buildSeedDeck({ seeds = [], colors = [], needs = [], removal = 4, twins = 0, refine = true } = {}) {
+  const names = seeds.map(String).map((s) => s.trim()).filter(Boolean).slice(0, 6);
+  if (!names.length) return { error: "Name at least one seed card." };
+  const C = [...new Set(colors.map(String))].filter((c) => "WUBRG".includes(c) && c.length === 1);
+  const N = [...new Set(needs.map(String))].filter((n) => /^[a-z0-9]+$/.test(n));
+  try {
+    return runSeedBuild({
+      seeds: names,
+      pool: poolData.cards,
+      landPool,
+      colors: C.length ? C : undefined,
+      needs: N,
+      removal: [0, 4, 8].includes(Number(removal)) ? Number(removal) : 4,
+      twins: Number(twins) ? 1 : 0,
+      refine: refine !== false,
+    });
+  } catch (err) {
+    console.error("seed build failed", err);
+    return { error: "The build failed. Try fewer seeds or different colors." };
+  }
+}
+
+/** Save a built list as a new Testing deck. */
+export async function saveSeedDeck({ main, name, seeds = [], needs = [], colors = [], passcode }) {
+  const denied = checkPasscode(passcode);
+  if (denied) return denied;
+  const text = String(main ?? "");
+  const checked = checkDeck(text, "");
+  if (checked.errors.length) return { error: checked.errors.join(" ") };
+  const unknown = checked.main.cards.map((c) => c.name).filter((n) => !allNames.has(n) && !BASIC_LANDS.has(n));
+  if (unknown.length) return { error: `Not in the Standard pool: ${unknown.slice(0, 3).join(", ")}.` };
+  const { cards } = await getCardData(text, "");
+  const COLOR = { W: "White", U: "Blue", B: "Black", R: "Red", G: "Green" };
+  const deck = {
+    name: String(name ?? "").trim().slice(0, 100) || `${seeds[0] ?? "Seed"} build`,
+    format: "Standard",
+    status: "Testing",
+    archetype: null,
+    colors: colors.map((c) => COLOR[c]).filter(Boolean),
+    main: text,
+    side: "",
+    guide: null,
+    edges: cards.length ? autoEdges(text, cards).text : null,
+    gateMatches: 30,
+    gateRate: 0.45,
+    notes: `Built from seeds in the app: ${seeds.join(", ")}. Needs: ${needs.join(", ") || "none"}. No sideboard yet.`,
   };
   try {
     const page = await createDeckPage(deck);

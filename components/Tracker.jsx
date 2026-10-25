@@ -153,6 +153,9 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
           <Link className="btnlink" href="/decks/new">
             Add a deck
           </Link>
+          <Link className="btnlink" href="/build">
+            Build from seeds
+          </Link>
         </nav>
         <HeaderBrand />
       </header>

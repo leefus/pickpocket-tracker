@@ -88,6 +88,17 @@ export default async function StartPage({ searchParams }) {
           );
         })}
         <li>
+          <Link href="/build" className="deckcard new">
+            <b>+ Build from seeds</b>
+            <p className="sub">Name one or more cards to build around. The app:</p>
+            <ol className="steps">
+              <li>Finds what they need and grows a deck by role</li>
+              <li>Sets the land count and mana</li>
+              <li>Swaps in faster cards with the goldfish, then you save it</li>
+            </ol>
+          </Link>
+        </li>
+        <li>
           <Link href="/decks/new" className="deckcard new">
             <b>+ Add a new deck</b>
             <p className="sub">Paste an Arena export. You&apos;ll get:</p>
