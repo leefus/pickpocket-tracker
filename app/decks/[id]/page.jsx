@@ -8,9 +8,13 @@ import { pressureTable, profileDeck, selfHarm } from "@/lib/axes.mjs";
 import { jonesField } from "@/lib/jones.mjs";
 import { FALLBACK_META } from "@/lib/meta.mjs";
 import { cardInfoMap } from "@/lib/cardinfo.mjs";
+import { deckRoles } from "@/lib/roles.mjs";
+import poolData from "@/lib/data/standard-pool.json";
 
 // Matches change every time you log one; always read fresh from Notion.
 export const dynamic = "force-dynamic";
+// The Roles panel's goldfish runs as a server action on this page; give it room.
+export const maxDuration = 60;
 
 export async function generateMetadata({ params }) {
   try {
@@ -38,6 +42,7 @@ export default async function DeckPage({ params, searchParams }) {
   if (!deck && !loadError && hasNotion()) notFound();
 
   let report = null;
+  let roles = null;
   let cardError = null;
   let cardInfo = {};
   if (deck) {
@@ -53,6 +58,13 @@ export default async function DeckPage({ params, searchParams }) {
     cardError = cards.error ?? null;
     cardInfo = cardInfoMap(cards.cards);
     if (cards.cards.length) report = pretest({ main: deck.main, side: deck.side, guide: deck.guide, cards: cards.cards });
+    if (cards.cards.length) {
+      try {
+        roles = { ...deckRoles(deck.main, cards.cards, poolData.cards), poolDate: poolData.updated };
+      } catch (err) {
+        console.error("roles failed", err);
+      }
+    }
     // A deck typed straight into Notion (or added before this existed) still gets a graph.
     // Shown only; nothing is written on a page view.
     if (!deck.edges && cards.cards.length) deck = { ...deck, edges: autoEdges(deck.main, cards.cards).text };
@@ -98,6 +110,7 @@ export default async function DeckPage({ params, searchParams }) {
       report={report}
       plan={plan}
       jones={jones}
+      roles={roles}
       cardError={cardError}
       cardInfo={cardInfo}
       isNew={searchParams?.new === "1"}

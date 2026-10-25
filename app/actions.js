@@ -2,10 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { APIErrorCode, isNotionClientError } from "@notionhq/client";
-import { canWrite, createDeckPage, createMatchPage, getMeta, requestAnalysisPage, trashMatchPage } from "@/lib/notion";
+import { canWrite, createDeckPage, createMatchPage, getDecks, getMeta, requestAnalysisPage, trashMatchPage } from "@/lib/notion";
 import { parseDeckInput, parseMatchInput } from "@/lib/mapping.mjs";
 import { getCardData } from "@/lib/scryfall";
 import { autoEdges } from "@/lib/autoedges.mjs";
+import { checkDeck, parseList } from "@/lib/decklist.mjs";
+import { applySwaps } from "@/lib/roles.mjs";
+import { buildDeck, compareSwaps, killTurns, paired, summary } from "@/lib/goldfish.mjs";
+import poolData from "@/lib/data/standard-pool.json";
 
 const checkPasscode = (given) => {
   if (!canWrite()) return { error: "Saving isn't switched on yet. Add the Notion variables and TRACKER_PASSCODE in Vercel." };
@@ -96,4 +100,96 @@ export async function requestAnalysis(deckId, passcode) {
   }
   revalidatePath("/", "layout");
   return { ok: true };
+}
+
+/* ------------------------------------------------------------------ roles + goldfish */
+
+const ID = /^[0-9a-f-]{32,36}$/i;
+const poolByName = new Map(poolData.cards.map((c) => [c.name.split(" // ")[0], c]));
+
+async function simDeck(deckId) {
+  if (!ID.test(String(deckId))) return { error: "That deck id doesn't look right." };
+  let deck;
+  try {
+    deck = (await getDecks()).find((d) => d.id === deckId);
+  } catch (err) {
+    return notionError(err, "lookup");
+  }
+  if (!deck) return { error: "Couldn't find that deck." };
+  const { cards, error } = await getCardData(deck.main, deck.side);
+  if (!cards.length) return { error: error ?? "No card data for this deck yet." };
+  return { deck, cards };
+}
+
+const cleanSwaps = (swaps, deckNames) =>
+  (Array.isArray(swaps) ? swaps : [])
+    .slice(0, 15)
+    .map((x) => ({ out: String(x?.out ?? ""), in: String(x?.in ?? "") }))
+    .filter((x) => deckNames.has(x.out) && poolByName.has(x.in) && !deckNames.has(x.in));
+
+/**
+ * Goldfish-rank candidates for one role: each candidate takes each member's place in turn
+ * (same copies, same shuffles) and keeps its best swap. Read-only, so no passcode.
+ */
+export async function goldfishRole(deckId, { candidates = [], members = [] } = {}) {
+  const d = await simDeck(deckId);
+  if (d.error) return d;
+  const deckNames = new Set(parseList(d.deck.main).cards.map((c) => c.name));
+  const cand = [...new Set(candidates.map(String))].filter((n) => poolByName.has(n) && !deckNames.has(n)).slice(0, 8);
+  const mem = [...new Set(members.map(String))].filter((n) => deckNames.has(n)).slice(0, 6);
+  if (!cand.length || !mem.length) return { error: "Pick at least one candidate and one card to swap out." };
+  const cards = [...d.cards, ...cand.map((n) => poolByName.get(n))];
+  return compareSwaps(d.deck.main, cards, { candidates: cand, members: mem, games: 1500 });
+}
+
+/** Goldfish the deck with the picked swaps against the deck as it is. */
+export async function goldfishPicks(deckId, swaps) {
+  const d = await simDeck(deckId);
+  if (d.error) return d;
+  const deckNames = new Set(parseList(d.deck.main).cards.map((c) => c.name));
+  const sw = cleanSwaps(swaps, deckNames);
+  if (!sw.length) return { error: "No valid swaps picked." };
+  const cards = [...d.cards, ...sw.map((x) => poolByName.get(x.in))];
+  const next = applySwaps(d.deck.main, sw);
+  const games = 3000;
+  const a = killTurns(buildDeck(d.deck.main, cards), { games });
+  const b = killTurns(buildDeck(next.text, cards), { games });
+  return { before: summary(a), after: summary(b), ...paired(a, b), games, swaps: sw, list: next.text };
+}
+
+/** Save the deck with the picked swaps as a NEW Testing deck. The original is never changed. */
+export async function saveSwapDeck(deckId, swaps, name, passcode) {
+  const denied = checkPasscode(passcode);
+  if (denied) return denied;
+  const d = await simDeck(deckId);
+  if (d.error) return d;
+  const deckNames = new Set(parseList(d.deck.main).cards.map((c) => c.name));
+  const sw = cleanSwaps(swaps, deckNames);
+  if (!sw.length) return { error: "No valid swaps picked." };
+  const title = String(name ?? "").trim().slice(0, 100) || `${d.deck.name} (role swaps)`;
+  const main = applySwaps(d.deck.main, sw).text;
+  const checked = checkDeck(main, d.deck.side);
+  if (checked.errors.length) return { error: checked.errors.join(" ") };
+  const { cards } = await getCardData(main, d.deck.side);
+  const deck = {
+    name: title,
+    format: d.deck.format ?? "Standard",
+    status: "Testing",
+    archetype: d.deck.archetype,
+    colors: d.deck.colors,
+    main,
+    side: d.deck.side,
+    guide: d.deck.guide || null,
+    edges: cards.length ? autoEdges(main, cards).text : null,
+    gateMatches: d.deck.gateMatches,
+    gateRate: d.deck.gateRate,
+    notes: `Made from "${d.deck.name}" in the Roles panel: ${sw.map((x) => `${x.in} for ${x.out}`).join("; ")}.`,
+  };
+  try {
+    const page = await createDeckPage(deck);
+    revalidatePath("/", "layout");
+    return { id: page.id };
+  } catch (err) {
+    return notionError(err, "deck");
+  }
 }

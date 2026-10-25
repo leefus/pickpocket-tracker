@@ -221,3 +221,24 @@ button.focusdot[aria-pressed="true"]{color:var(--ink)}
 .cardtext .ctitle{display:flex;justify-content:space-between;gap:8px}
 .cardtext .rules{white-space:pre-line;margin:6px 0 4px;line-height:1.45}
 .cardtext .otherface{opacity:.65}
+/* Roles panel */
+.role{border:1px solid var(--line);border-radius:6px;background:var(--surface);padding:12px 14px;margin:12px 0;display:flex;flex-direction:column;gap:10px}
+.rolehead{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.rolecols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px}
+.side h4{margin:0 0 6px;font-size:.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.side .tbl{margin-top:8px}
+.members{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.chip{display:inline-block;margin-left:6px;padding:0 6px;border-radius:4px;background:var(--line);font-size:.72rem;color:var(--muted);vertical-align:1px}
+.splitline{display:flex;flex-direction:column;gap:4px}
+.splitbar{position:relative;height:8px;background:var(--line);border-radius:4px;max-width:420px}
+.splitbar i{display:block;height:100%;background:var(--gold);border-radius:4px 0 0 4px}
+.splitbar s{position:absolute;top:-3px;width:2px;height:14px;background:var(--ink);text-decoration:none}
+.tray{border-top:1px solid var(--line);margin-top:16px;padding-top:12px;display:flex;flex-direction:column;gap:10px}
+.tray h3{margin:0}
+.picks{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.picks select{max-width:220px}
+details.more{margin:12px 0}
+.good{color:var(--good)} .bad{color:var(--bad)}
+.side td .chip{display:block;width:fit-content;margin:2px 0 0}
+.side table{min-width:0}
+.side td,.side th{padding-left:8px;padding-right:8px}
