@@ -271,6 +271,14 @@ export async function saveSeedDeck({ main, name, seeds = [], needs = [], colors 
 
 /* ------------------------------------------------------------------ duel sim */
 
+const listKey = (main) => parseList(main).cards.map((c) => `${c.qty} ${c.name}`).sort().join("|");
+const META_KEYS = new Set(META_DECKS.map((m) => listKey(m.main)));
+const META_NAMES = new Set(META_DECKS.map((m) => m.name));
+/** Other tracker decks still in use, minus copies of the bundled meta decks (same name or same list). */
+function trackerOpponents(decks, deckId) {
+  return decks.filter((x) => x.id !== deckId && x.status !== "Retired" && x.main && !META_NAMES.has(x.name) && !META_KEYS.has(listKey(x.main))).slice(0, 6);
+}
+
 /** Opponents for a deck: the bundled meta decks plus the other tracker decks still in use. */
 async function duelSetup(deckId) {
   const d = await simDeck(deckId);
@@ -279,7 +287,7 @@ async function duelSetup(deckId) {
   try {
     decks = await getDecks();
   } catch {}
-  const others = decks.filter((x) => x.id !== deckId && x.status !== "Retired" && x.main).slice(0, 6);
+  const others = trackerOpponents(decks, deckId);
   const otherCards = await Promise.all(others.map((x) => getCardData(x.main, "")));
   const opponents = [
     ...META_DECKS.map((m) => ({ key: `meta:${m.key}`, name: m.name, kind: "meta", deck: buildDuelDeck(m.main, META_CARDS) })),

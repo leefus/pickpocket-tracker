@@ -10,7 +10,7 @@ import { FALLBACK_META } from "@/lib/meta.mjs";
 import { cardInfoMap } from "@/lib/cardinfo.mjs";
 import { deckRoles } from "@/lib/roles.mjs";
 import poolData from "@/lib/data/standard-pool.json";
-import { META_DECKS } from "@/lib/metadecks.mjs";
+import { META_DECKS, isMetaCopy } from "@/lib/metadecks.mjs";
 
 // Matches change every time you log one; always read fresh from Notion.
 export const dynamic = "force-dynamic";
@@ -112,7 +112,7 @@ export default async function DeckPage({ params, searchParams }) {
       plan={plan}
       jones={jones}
       roles={roles}
-      opponents={deck ? [...META_DECKS.map((m) => ({ key: `meta:${m.key}`, name: m.name })), ...decks.filter((x) => x.id !== deck.id && x.status !== "Retired").slice(0, 6).map((x) => ({ key: `deck:${x.id}`, name: x.name }))] : []}
+      opponents={deck ? [...META_DECKS.map((m) => ({ key: `meta:${m.key}`, name: m.name })), ...decks.filter((x) => x.id !== deck.id && x.status !== "Retired" && x.main && !isMetaCopy(x)).slice(0, 6).map((x) => ({ key: `deck:${x.id}`, name: x.name }))] : []}
       cardError={cardError}
       cardInfo={cardInfo}
       isNew={searchParams?.new === "1"}
