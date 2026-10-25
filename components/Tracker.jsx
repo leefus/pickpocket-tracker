@@ -13,6 +13,7 @@ import PretestPanel from "./PretestPanel";
 import PlanPanel from "./PlanPanel";
 import JonesPanel from "./JonesPanel";
 import RolePanel from "./RolePanel";
+import MatchupPanel from "./MatchupPanel";
 import { HeaderBrand } from "./Brand";
 import { CardInfoProvider, CardName } from "./CardInfo";
 import { splitCardList } from "@/lib/cardinfo.mjs";
@@ -29,7 +30,7 @@ const fmtDate = (iso) => {
   return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
 };
 
-export default function Tracker({ deck, decks, meta, matches, report = null, plan = null, jones = null, roles = null, cardError = null, cardInfo = {}, isNew = false, writable, connected, missing = [], loadError }) {
+export default function Tracker({ deck, decks, meta, matches, report = null, plan = null, jones = null, roles = null, opponents = [], cardError = null, cardInfo = {}, isNew = false, writable, connected, missing = [], loadError }) {
   const router = useRouter();
   const formRef = useRef(null);
   const pc = usePasscode();
@@ -276,7 +277,8 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
           </section>
 
           <GraphPanel deck={deck} matches={matches} />
-          <RolePanel roles={roles} deck={deck} writable={writable} pc={pc} />
+          <MatchupPanel deck={deck} logged={Object.fromEntries(s.byOpponent.filter((o) => o.n).map((o) => [o.group, rec(o)]))} />
+          <RolePanel roles={roles} deck={deck} writable={writable} pc={pc} opponents={opponents} />
 
           <PlanPanel plan={plan} deckName={deck.name} />
           <JonesPanel jones={jones} deck={deck} />

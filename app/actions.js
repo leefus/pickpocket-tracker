@@ -9,6 +9,8 @@ import { autoEdges } from "@/lib/autoedges.mjs";
 import { BASIC_LANDS, checkDeck, parseList } from "@/lib/decklist.mjs";
 import { runSeedBuild, seedInfo } from "@/lib/seedbuild.mjs";
 import landData from "@/lib/data/standard-lands.json";
+import { buildDuelDeck, coverage, matchup, pairedWin } from "@/lib/duel.mjs";
+import { META_CARDS, META_DECKS } from "@/lib/metadecks.mjs";
 import { applySwaps } from "@/lib/roles.mjs";
 import { buildDeck, compareSwaps, killTurns, paired, summary } from "@/lib/goldfish.mjs";
 import poolData from "@/lib/data/standard-pool.json";
@@ -265,4 +267,52 @@ export async function saveSeedDeck({ main, name, seeds = [], needs = [], colors 
   } catch (err) {
     return notionError(err, "deck");
   }
+}
+
+/* ------------------------------------------------------------------ duel sim */
+
+/** Opponents for a deck: the bundled meta decks plus the other tracker decks still in use. */
+async function duelSetup(deckId) {
+  const d = await simDeck(deckId);
+  if (d.error) return d;
+  let decks = [];
+  try {
+    decks = await getDecks();
+  } catch {}
+  const others = decks.filter((x) => x.id !== deckId && x.status !== "Retired" && x.main).slice(0, 6);
+  const otherCards = await Promise.all(others.map((x) => getCardData(x.main, "")));
+  const opponents = [
+    ...META_DECKS.map((m) => ({ key: `meta:${m.key}`, name: m.name, kind: "meta", deck: buildDuelDeck(m.main, META_CARDS) })),
+    ...others.map((x, i) => ({ key: `deck:${x.id}`, name: x.name, kind: "tracker", deck: buildDuelDeck(x.main, otherCards[i].cards) })).filter((o) => o.deck.length >= 40),
+  ];
+  return { ...d, opponents };
+}
+
+/** Simulated win rate against each opponent (read-only, no passcode). */
+export async function simulateMatchups(deckId) {
+  const s = await duelSetup(deckId);
+  if (s.error) return s;
+  const me = buildDuelDeck(s.deck.main, s.cards);
+  const games = 300;
+  const rows = s.opponents.map((o) => {
+    const r = matchup(me, o.deck, { games });
+    return { key: o.key, name: o.name, kind: o.kind, win: r.win, se: r.se, onPlay: r.onPlay, onDraw: r.onDraw, avgTurns: r.avgTurns, coverage: coverage(o.deck) };
+  });
+  return { games, coverage: coverage(me), rows };
+}
+
+/** Picked swaps against one opponent, on the same games as the current list. */
+export async function duelPicks(deckId, opponentKey, swaps) {
+  const s = await duelSetup(deckId);
+  if (s.error) return s;
+  const o = s.opponents.find((x) => x.key === opponentKey);
+  if (!o) return { error: "Pick an opponent." };
+  const deckNames = new Set(parseList(s.deck.main).cards.map((c) => c.name));
+  const sw = cleanSwaps(swaps, deckNames);
+  if (!sw.length) return { error: "No valid swaps picked." };
+  const cards = [...s.cards, ...sw.map((x) => poolByName.get(x.in))];
+  const games = 800;
+  const a = matchup(buildDuelDeck(s.deck.main, cards), o.deck, { games });
+  const b = matchup(buildDuelDeck(applySwaps(s.deck.main, sw).text, cards), o.deck, { games });
+  return { opponent: o.name, before: a.win, after: b.win, ...pairedWin(a, b), games };
 }

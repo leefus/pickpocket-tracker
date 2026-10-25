@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { goldfishPicks, goldfishRole, saveSwapDeck } from "@/app/actions";
+import { duelPicks, goldfishPicks, goldfishRole, saveSwapDeck } from "@/app/actions";
 import { BASIC_LANDS, parseList } from "@/lib/decklist.mjs";
 import { CardName } from "./CardInfo";
 
@@ -20,11 +20,14 @@ const toneOf = (v) => (v === "Balanced." ? "good" : v.startsWith("No producers")
  * (all its producers link to all its payoffs, so they're interchangeable there).
  * `roles` comes from lib/roles.mjs on the server.
  */
-export default function RolePanel({ roles, deck, writable, pc }) {
+export default function RolePanel({ roles, deck, writable, pc, opponents = [] }) {
   const router = useRouter();
   const [picks, setPicks] = useState([]); // [{in, out, role}]
   const [ranks, setRanks] = useState({}); // "layer:side" → result | {error} | "loading"
   const [test, setTest] = useState(null);
+  const [vs, setVs] = useState(opponents[0]?.key ?? "");
+  const [duel, setDuel] = useState(null);
+  const [dueling, startDuel] = useTransition();
   const [name, setName] = useState("");
   const [msg, setMsg] = useState(null);
   const [pending, start] = useTransition();
@@ -39,14 +42,17 @@ export default function RolePanel({ roles, deck, writable, pc }) {
 
   const pick = (inn, out, role) => {
     setTest(null);
+    setDuel(null);
     setPicks((p) => (p.some((x) => x.in === inn) ? p : [...p, { in: inn, out, role }]));
   };
   const unpick = (inn) => {
     setTest(null);
+    setDuel(null);
     setPicks((p) => p.filter((x) => x.in !== inn));
   };
   const setOut = (inn, out) => {
     setTest(null);
+    setDuel(null);
     setPicks((p) => p.map((x) => (x.in === inn ? { ...x, out } : x)));
   };
 
@@ -65,6 +71,11 @@ export default function RolePanel({ roles, deck, writable, pc }) {
     start(async () => {
       setMsg(null);
       setTest(await goldfishPicks(deck.id, picks));
+    });
+  const runDuel = () =>
+    startDuel(async () => {
+      setDuel({ loading: true });
+      setDuel(await duelPicks(deck.id, vs, picks));
     });
   const save = () =>
     start(async () => {
@@ -191,6 +202,32 @@ export default function RolePanel({ roles, deck, writable, pc }) {
                 </button>
               )}
             </div>
+            {opponents.length > 0 && (
+              <div className="claude-line">
+                <label>
+                  Against
+                  <select value={vs} onChange={(e) => (setVs(e.target.value), setDuel(null))}>
+                    {opponents.map((o) => (
+                      <option key={o.key} value={o.key}>
+                        {o.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <button type="button" className="ghost" onClick={runDuel} disabled={dueling}>
+                  {dueling ? "Playing 800 games each…" : "Duel-test my picks"}
+                </button>
+              </div>
+            )}
+            {duel?.error && <p className="msg err">{duel.error}</p>}
+            {duel?.before != null && (
+              <p className="small">
+                Against <b>{duel.opponent}</b>: win rate <span className="num">{Math.round(duel.before * 100)}%</span> →{" "}
+                <span className="num">{Math.round(duel.after * 100)}%</span> ({duel.delta >= 0 ? "+" : "−"}
+                {Math.abs(Math.round(duel.delta * 1000) / 10)} points ± {Math.round(duel.se * 2000) / 10},{" "}
+                {Math.abs(duel.delta) < 2 * duel.se ? "within the noise" : duel.delta > 0 ? "really better" : "really worse"}). Same {duel.games} games for both lists.
+              </p>
+            )}
             {test?.error && <p className="msg err">{test.error}</p>}
             {test?.before && (
               <div className="strip tight">
