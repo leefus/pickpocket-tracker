@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { Fragment, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { duelPicks, goldfishPicks, goldfishRole, saveSwapDeck } from "@/app/actions";
+import { duelPicks, goldfishPicks, goldfishRole, saveSwapDeck, swapIntoDeck } from "@/app/actions";
 import { BASIC_LANDS, parseList } from "@/lib/decklist.mjs";
 import { CardName } from "./CardInfo";
 
@@ -26,6 +26,14 @@ export default function RolePanel({ roles, deck, writable, pc, opponents = [] })
   const [ranks, setRanks] = useState({}); // "layer:side" → result | {error} | "loading"
   const [test, setTest] = useState(null);
   const [vs, setVs] = useState(opponents[0]?.key ?? "");
+  const [adding, setAdding] = useState(null); // { in, out, role }: the pick being confirmed
+  const [added, setAdded] = useState(null); // result of the last change to the deck
+  const [changing, startChange] = useTransition();
+  const [undoing, setUndoing] = useState(false);
+  const today = () => {
+    const d = new Date();
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  };
   const [duel, setDuel] = useState(null);
   const [dueling, startDuel] = useTransition();
   const [name, setName] = useState("");
@@ -72,6 +80,31 @@ export default function RolePanel({ roles, deck, writable, pc, opponents = [] })
       setMsg(null);
       setTest(await goldfishPicks(deck.id, picks));
     });
+  // Pick → put it straight into this deck (passcode), with Undo
+  const confirmAdd = () =>
+    startChange(async () => {
+      const r = await swapIntoDeck(deck.id, { in: adding.in, out: adding.out }, pc.passcode, today());
+      if (r.error) return setAdded({ error: r.error });
+      pc.keep();
+      setAdded(r);
+      setAdding(null);
+      setRanks({});
+      router.refresh();
+    });
+  const undo = () =>
+    startChange(async () => {
+      setUndoing(true);
+      const r = await swapIntoDeck(deck.id, { in: added.out, out: added.in }, pc.passcode, today());
+      setUndoing(false);
+      if (r.error) return setAdded({ ...added, error: r.error });
+      setAdded({ undone: true, in: added.in, out: added.out });
+      setRanks({});
+      router.refresh();
+    });
+  const tryFirst = () => {
+    pick(adding.in, adding.out, adding.role);
+    setAdding(null);
+  };
   const runDuel = () =>
     startDuel(async () => {
       setDuel({ loading: true });
@@ -108,7 +141,32 @@ export default function RolePanel({ roles, deck, writable, pc, opponents = [] })
       <SplitLine layer={layer} />
       <div className="rolecols">
         {["P", "Q"].map((side) => (
-          <Side key={side} layer={layer} side={side} result={ranks[`${layer.id}:${side}`]} onRank={() => rank(layer, side)} busy={ranking} picks={picks} onPick={pick} />
+          <Side
+            key={side}
+            layer={layer}
+            side={side}
+            result={ranks[`${layer.id}:${side}`]}
+            onRank={() => rank(layer, side)}
+            busy={ranking}
+            picks={picks}
+            onPick={(inn, out) => (setAdded(null), setAdding({ in: inn, out, role: layer.id }))}
+            confirm={
+              adding && (
+                <AddRow
+                  adding={adding}
+                  setOut={(out) => setAdding({ ...adding, out })}
+                  deckCards={deckCards}
+                  pc={pc}
+                  writable={writable}
+                  busy={changing}
+                  error={added?.error}
+                  onAdd={confirmAdd}
+                  onTry={tryFirst}
+                  onCancel={() => setAdding(null)}
+                />
+              )
+            }
+          />
         ))}
       </div>
     </div>
@@ -147,6 +205,23 @@ export default function RolePanel({ roles, deck, writable, pc, opponents = [] })
         </div>
       </div>
 
+      {added && !added.error && (
+        <div className={`gate ${added.undone ? "warn" : "good"}`} role="status">
+          {added.undone ? (
+            <>
+              <b>Undone.</b> {added.out} is back in the deck in place of {added.in}.
+            </>
+          ) : (
+            <>
+              <b>Added to the deck:</b> {added.copies} {added.in} in for {added.copies} {added.out}. The deck list, pre-test, graph and roles now use
+              the new list, and the change is logged in the deck&apos;s notes.{" "}
+              <button type="button" className="ghost" onClick={undo} disabled={changing}>
+                {undoing ? "Undoing…" : "Undo"}
+              </button>
+            </>
+          )}
+        </div>
+      )}
       {open.map((l) => (
         <Role key={l.id} layer={l} />
       ))}
@@ -171,7 +246,10 @@ export default function RolePanel({ roles, deck, writable, pc, opponents = [] })
       <div className="tray">
         <h3>Your picks</h3>
         {!picks.length ? (
-          <p className="sub small">Pick a candidate in any role. It takes the place (and the number of copies) of the card you choose.</p>
+          <p className="sub small">
+            <b>Pick</b> puts a card straight into the deck. Choose <b>Compare first</b> instead to collect a few picks here and goldfish or
+            duel-test them before changing anything.
+          </p>
         ) : (
           <>
             <ul className="picks">
@@ -294,7 +372,42 @@ function SplitLine({ layer }) {
   );
 }
 
-function Side({ layer, side, result, onRank, busy, picks, onPick }) {
+/** The confirm row under a picked candidate: which card it replaces, then add, compare first, or cancel. */
+function AddRow({ adding, setOut, deckCards, pc, writable, busy, error, onAdd, onTry, onCancel }) {
+  return (
+    <div className="addrow">
+      <label>
+        Replaces
+        <select value={adding.out ?? ""} onChange={(e) => setOut(e.target.value)}>
+          {deckCards.map((n) => (
+            <option key={n} value={n}>
+              {n}
+            </option>
+          ))}
+        </select>
+      </label>
+      {!pc.passcode && (
+        <label>
+          Passcode
+          <input type="password" autoComplete="current-password" value={pc.passcode} onChange={(e) => pc.setPasscode(e.target.value)} disabled={!writable} />
+        </label>
+      )}
+      <button type="button" onClick={onAdd} disabled={busy || !writable || !pc.passcode || !adding.out}>
+        {busy ? "Adding…" : "Add to deck"}
+      </button>
+      <button type="button" className="ghost" onClick={onTry}>
+        Compare first
+      </button>
+      <button type="button" className="ghost" onClick={onCancel}>
+        Cancel
+      </button>
+      <span className="sub small">It takes that card&apos;s place and copies.{!writable ? " Saving is off until the passcode is set in Vercel." : ""}</span>
+      {error && <span className="msg err">{error}</span>}
+    </div>
+  );
+}
+
+function Side({ layer, side, result, onRank, busy, picks, onPick, confirm }) {
   const members = side === "P" ? layer.producers : layer.payoffs;
   const cands = layer.candidates[side];
   const byIn = new Map(result && result.results ? result.results.map((r) => [r.in, r]) : []);
@@ -339,7 +452,8 @@ function Side({ layer, side, result, onRank, busy, picks, onPick }) {
                   const v = g && verdictOf(g);
                   const picked = picks.some((p) => p.in === c.name);
                   return (
-                    <tr key={c.name}>
+                    <Fragment key={c.name}>
+                    <tr>
                       <td>
                         <CardName name={c.name} />
                         {c.alsoIn.length > 0 && <span className="chip">also {c.alsoIn.join(", ")}</span>}
@@ -360,10 +474,16 @@ function Side({ layer, side, result, onRank, busy, picks, onPick }) {
                       )}
                       <td className="r">
                         <button type="button" className="ghost" disabled={picked} onClick={() => onPick(c.name, g?.out ?? weakest ?? layer.producers[0]?.name ?? layer.payoffs[0]?.name, layer.id)}>
-                          {picked ? "Picked" : "Pick"}
+                          {picked ? "In compare" : "Pick"}
                         </button>
                       </td>
                     </tr>
+                    {confirm && confirm.props.adding.in === c.name && confirm.props.adding.role === layer.id && (
+                      <tr className="addtr">
+                        <td colSpan={result?.results ? 5 : 4}>{confirm}</td>
+                      </tr>
+                    )}
+                    </Fragment>
                   );
                 })}
               </tbody>

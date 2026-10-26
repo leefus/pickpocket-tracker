@@ -2,10 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { APIErrorCode, isNotionClientError } from "@notionhq/client";
-import { canWrite, createDeckPage, createMatchPage, getDecks, getMeta, requestAnalysisPage, trashMatchPage } from "@/lib/notion";
+import { canWrite, createDeckPage, createMatchPage, getDecks, getMeta, requestAnalysisPage, trashMatchPage, updateDeckList } from "@/lib/notion";
 import { parseDeckInput, parseMatchInput } from "@/lib/mapping.mjs";
 import { getCardData } from "@/lib/scryfall";
-import { autoEdges } from "@/lib/autoedges.mjs";
+import { autoEdges, isAutoEdges } from "@/lib/autoedges.mjs";
 import { BASIC_LANDS, checkDeck, parseList } from "@/lib/decklist.mjs";
 import { runSeedBuild, seedInfo } from "@/lib/seedbuild.mjs";
 import landData from "@/lib/data/standard-lands.json";
@@ -323,4 +323,44 @@ export async function duelPicks(deckId, opponentKey, swaps) {
   const a = matchup(buildDuelDeck(s.deck.main, cards), o.deck, { games });
   const b = matchup(buildDuelDeck(applySwaps(s.deck.main, sw).text, cards), o.deck, { games });
   return { opponent: o.name, before: a.win, after: b.win, ...pairedWin(a, b), games };
+}
+
+/**
+ * Put a picked card into THIS deck: it takes the place and copies of `out`. Reviewed synergy edges
+ * are kept, minus the ones that named the old card, plus first-pass edges for the new one.
+ * Every change is logged in the deck's Notes, so it can be undone by hand too.
+ */
+export async function swapIntoDeck(deckId, swap, passcode, day) {
+  const denied = checkPasscode(passcode);
+  if (denied) return denied;
+  const d = await simDeck(deckId);
+  if (d.error) return d;
+  const deckNames = new Set(parseList(d.deck.main).cards.map((c) => c.name));
+  const sw = cleanSwaps([swap], deckNames);
+  if (!sw.length) return { error: "That swap isn't valid (the new card must be a Standard nonland card not already in the deck)." };
+  const { in: inn, out } = sw[0];
+  const copies = parseList(d.deck.main).cards.find((c) => c.name === out)?.qty ?? 0;
+  const main = applySwaps(d.deck.main, sw).text;
+  const checked = checkDeck(main, d.deck.side);
+  if (checked.errors.length) return { error: checked.errors.join(" ") };
+  const { cards } = await getCardData(main, d.deck.side);
+  let edges = d.deck.edges;
+  if (cards.length) {
+    const auto = autoEdges(main, cards);
+    if (!edges || isAutoEdges(edges)) edges = auto.text;
+    else {
+      const kept = edges.split("\n").filter((l) => !l.split("|")[0].split(/\s+(?:--|!!)\s+/).map((x) => x.trim()).includes(out));
+      const fresh = auto.edges.filter((e) => e.a === inn || e.b === inn).map((e) => `${e.a} -- ${e.b} | auto: ${e.why.join("; ")}`);
+      edges = [...kept, ...fresh].join("\n");
+    }
+  }
+  const stamp = /^\d{4}-\d{2}-\d{2}$/.test(String(day)) ? day : new Date().toISOString().slice(0, 10); // the player's local date when given
+  const notes = [d.deck.notes, `${stamp} Roles panel: ${copies} ${inn} in for ${copies} ${out}.`].filter(Boolean).join("\n");
+  try {
+    await updateDeckList(deckId, { main, edges, notes });
+  } catch (err) {
+    return notionError(err, "deck change");
+  }
+  revalidatePath("/", "layout");
+  return { ok: true, in: inn, out, copies };
 }
