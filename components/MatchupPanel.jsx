@@ -1,10 +1,75 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { simulateMatchups } from "@/app/actions";
+import { simulateMatchups, testSideboardPlan } from "@/app/actions";
+import { planFor } from "@/lib/sideplan.mjs";
 
 const pc = (x) => (x == null ? "—" : `${Math.round(x * 100)}%`);
 const tone = (w) => (w >= 0.55 ? "good" : w <= 0.45 ? "bad" : "warn");
+const planText = (p) => (p ? [...p.ins.map((r) => `+${r.qty} ${r.name}`), ...p.outs.map((r) => `-${r.qty} ${r.name}`)].join(" ") : "");
+
+/** Test an in/out plan against one opponent, on the same games as the main deck. */
+function PlanTester({ deck, rows }) {
+  const sorted = [...rows].sort((a, b) => a.win - b.win);
+  const [opp, setOpp] = useState(sorted[0]?.key ?? "");
+  const name = rows.find((r) => r.key === opp)?.name ?? "";
+  const [text, setText] = useState(() => planText(planFor(deck.guide, sorted[0]?.name ?? "")));
+  const [res, setRes] = useState(null);
+  const [pending, start] = useTransition();
+  const pick = (key) => {
+    setOpp(key);
+    setRes(null);
+    setText(planText(planFor(deck.guide, rows.find((r) => r.key === key)?.name ?? "")));
+  };
+  const run = () =>
+    start(async () => {
+      setRes(await testSideboardPlan(deck.id, opp, text));
+    });
+  return (
+    <div className="plan-tester">
+      <h3>Test a sideboard plan</h3>
+      <p className="sub small">
+        Pick an opponent and write the plan as <code>+2 Get Lost -2 Hop to It</code>. It starts from your sideboard guide&apos;s line for
+        that opponent when there is one. The main deck and the boarded deck play the same 600 games, so the difference is fairer than two
+        separate runs. A good plan usually keeps your threats and adds only cheap answers.
+      </p>
+      <div className="claude-line">
+        <select value={opp} onChange={(e) => pick(e.target.value)} aria-label="Opponent">
+          {sorted.map((r) => (
+            <option key={r.key} value={r.key}>
+              {r.name} ({pc(r.win)})
+            </option>
+          ))}
+        </select>
+      </div>
+      <textarea
+        rows={2}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder={`No guide line for ${name}. Type a plan like +2 Get Lost -2 Hop to It`}
+        aria-label="Sideboard plan"
+        style={{ width: "100%" }}
+      />
+      <div className="claude-line">
+        <button type="button" onClick={run} disabled={pending || !text.trim()}>
+          {pending ? "Playing the games (about 10 seconds)…" : "Test this plan"}
+        </button>
+      </div>
+      {res?.error && <p className="msg err">{res.error}</p>}
+      {res?.after != null && (
+        <p>
+          Against {res.opponent}: main deck <b>{pc(res.before)}</b> → boarded <span className={`pill ${tone(res.after)}`}>{pc(res.after)}</span>{" "}
+          <span className="sub small num">
+            ({res.delta >= 0 ? "+" : ""}
+            {Math.round(res.delta * 1000) / 10} points, ±{Math.round(res.se * 2000) / 10})
+          </span>
+          {Math.abs(res.delta) < 2 * res.se && <span className="sub small"> That&apos;s within noise: the plan barely changes the matchup.</span>}
+          {res.delta <= -2 * res.se && <span className="sub small"> The plan makes this matchup worse. Try cutting fewer threats.</span>}
+        </p>
+      )}
+    </div>
+  );
+}
 
 /**
  * Simulated matchups: this deck against the meta decks and the other tracker decks, both sides played
@@ -80,6 +145,7 @@ export default function MatchupPanel({ deck, logged = {} }) {
           in the Roles panel to check a swap against one opponent on the same games.
         </p>
       )}
+      {res?.rows?.length > 0 && <PlanTester deck={deck} rows={res.rows} />}
     </section>
   );
 }

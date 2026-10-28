@@ -12,6 +12,8 @@ import landData from "@/lib/data/standard-lands.json";
 import { buildDuelDeck, coverage, matchup, pairedWin } from "@/lib/duel.mjs";
 import { META_CARDS, META_DECKS } from "@/lib/metadecks.mjs";
 import { applySwaps } from "@/lib/roles.mjs";
+import { boardDeck, parsePlan, planFor } from "@/lib/sideplan.mjs";
+import { threatCheck } from "@/lib/threats.mjs";
 import { buildDeck, compareSwaps, killTurns, paired, summary } from "@/lib/goldfish.mjs";
 import poolData from "@/lib/data/standard-pool.json";
 
@@ -323,6 +325,33 @@ export async function duelPicks(deckId, opponentKey, swaps) {
   const a = matchup(buildDuelDeck(s.deck.main, cards), o.deck, { games });
   const b = matchup(buildDuelDeck(applySwaps(s.deck.main, sw).text, cards), o.deck, { games });
   return { opponent: o.name, before: a.win, after: b.win, ...pairedWin(a, b), games };
+}
+
+/**
+ * Test a sideboard plan against one opponent: the main deck and the boarded deck play the same games.
+ * `planText` is "+2 Card -2 Other"; when it's empty, the deck's guide line for that opponent is used.
+ */
+export async function testSideboardPlan(deckId, opponentKey, planText) {
+  const s = await duelSetup(deckId);
+  if (s.error) return s;
+  const o = s.opponents.find((x) => x.key === opponentKey);
+  if (!o) return { error: "Pick an opponent." };
+  const typed = String(planText ?? "").slice(0, 2000).trim();
+  const plan = typed ? parsePlan(typed) : planFor(s.deck.guide, o.name);
+  if (!plan) return { error: `The sideboard guide has no line for ${o.name}. Type a plan like "+2 Get Lost -2 Hop to It".` };
+  const boarded = boardDeck(s.deck.main, s.deck.side, plan);
+  if (boarded.errors.length) return { error: boarded.errors.join(" "), plan: { ins: plan.ins, outs: plan.outs } };
+  const games = 600;
+  const a = matchup(buildDuelDeck(s.deck.main, s.cards), o.deck, { games });
+  const b = matchup(buildDuelDeck(boarded.text, s.cards), o.deck, { games });
+  return { opponent: o.name, plan: { ins: plan.ins, outs: plan.outs }, before: a.win, after: b.win, ...pairedWin(a, b), games };
+}
+
+/** Cheap answers to the meta's big creatures (read-only). */
+export async function metaThreats(deckId) {
+  const d = await simDeck(deckId);
+  if (d.error) return d;
+  return threatCheck(d.deck.main, d.deck.side, META_DECKS, [...d.cards, ...META_CARDS]);
 }
 
 /**
