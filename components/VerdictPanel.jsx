@@ -32,9 +32,9 @@ export default function VerdictPanel({ deck }) {
       if (s.error) return setMsg(s.error);
       setMeta(s);
       const out = s.cards.map((c) => ({ ...c }));
-      for (let i = 0; i < out.length; i += 3) {
-        setProgress(`Knocking out cards ${i + 1}–${Math.min(i + 3, out.length)} of ${out.length}…`);
-        const k = await cardKnockouts(deck.id, out.slice(i, i + 3).map((c) => c.name));
+      for (let i = 0; i < out.length; i += 2) {
+        setProgress(`Knocking out cards ${i + 1}–${Math.min(i + 2, out.length)} of ${out.length}…`);
+        const k = await cardKnockouts(deck.id, out.slice(i, i + 2).map((c) => c.name));
         if (k.error) return setMsg(k.error);
         for (const r of k.rows) Object.assign(out.find((c) => c.name === r.name), r, { worstName: k.worstName });
         setMeta({ ...s, worstName: k.worstName, worstWin: k.worstWin });
@@ -84,7 +84,7 @@ export default function VerdictPanel({ deck }) {
       </p>
       <div className="claude-line">
         <button type="button" onClick={judge} disabled={pending}>
-          {pending && mode === "judge" ? progress || "Working…" : rows ? "Judge again" : "Judge each card (about a minute)"}
+          {pending && mode === "judge" ? progress || "Working…" : rows ? "Judge again" : "Judge each card (a minute or two)"}
         </button>
       </div>
       {msg && <p className="msg err">{msg}</p>}
