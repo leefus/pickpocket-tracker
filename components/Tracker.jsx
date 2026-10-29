@@ -15,6 +15,7 @@ import JonesPanel from "./JonesPanel";
 import RolePanel from "./RolePanel";
 import MatchupPanel from "./MatchupPanel";
 import ThreatPanel from "./ThreatPanel";
+import VerdictPanel from "./VerdictPanel";
 import { HeaderBrand } from "./Brand";
 import { CardInfoProvider, CardName } from "./CardInfo";
 import { splitCardList } from "@/lib/cardinfo.mjs";
@@ -280,6 +281,7 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
           <GraphPanel deck={deck} matches={matches} />
           <MatchupPanel deck={deck} logged={Object.fromEntries(s.byOpponent.filter((o) => o.n).map((o) => [o.group, rec(o)]))} />
           <ThreatPanel deck={deck} />
+          <VerdictPanel deck={deck} />
           <RolePanel roles={roles} deck={deck} writable={writable} pc={pc} opponents={opponents} />
 
           <PlanPanel plan={plan} deckName={deck.name} />
