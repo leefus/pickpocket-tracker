@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { cardKnockouts, cardVerdictSetup, swapSearchConfirm, swapSearchRound, swapSearchStart } from "@/app/actions";
 import { verdictOf } from "@/lib/verdict.mjs";
 
-const TONE = { strong: "good", engine: "warn", role: "", blind: "warn", cut: "bad" };
+const TONE = { strong: "good", worst: "good", engine: "warn", role: "", blind: "warn", cut: "bad" };
 const sign = (x) => `${x >= 0 ? "+" : ""}${x}`;
 
 /**
@@ -36,7 +36,8 @@ export default function VerdictPanel({ deck }) {
         setProgress(`Knocking out cards ${i + 1}–${Math.min(i + 3, out.length)} of ${out.length}…`);
         const k = await cardKnockouts(deck.id, out.slice(i, i + 3).map((c) => c.name));
         if (k.error) return setMsg(k.error);
-        for (const r of k.rows) Object.assign(out.find((c) => c.name === r.name), r);
+        for (const r of k.rows) Object.assign(out.find((c) => c.name === r.name), r, { worstName: k.worstName });
+        setMeta({ ...s, worstName: k.worstName, worstWin: k.worstWin });
         setRows(out.map((c) => ({ ...c })));
       }
       const judged = out.map((c) => ({ ...c, verdict: verdictOf({ ...c, maxDegree: s.maxDegree }) }));
@@ -94,6 +95,7 @@ export default function VerdictPanel({ deck }) {
               <tr>
                 <th>Card</th>
                 <th className="r" title="win-rate points the card adds over a plain body of the same mana value; ± is two standard errors">Own value</th>
+                <th className="r" title="own value against your worst meta matchup in these games">{meta?.worstName ? `vs ${meta.worstName.split(" ").slice(-1)[0]}` : "Worst matchup"}</th>
                 <th className="r" title="betweenness centrality in the synergy graph, 0–1">Partner value</th>
                 <th className="r">Partners</th>
                 <th className="r" title="share of the card's text the sim understands">Sim reads</th>
@@ -108,6 +110,7 @@ export default function VerdictPanel({ deck }) {
                     {c.copies} {c.name}
                   </td>
                   <td className="r num">{c.own == null ? "…" : <>{sign(c.own)} <span className="sub small">±{(2 * c.ownSe).toFixed(1)}</span></>}</td>
+                  <td className="r num">{c.worst == null ? "…" : sign(c.worst)}</td>
                   <td className="r num">{c.partner.toFixed(2)}</td>
                   <td className="r num">{c.degree}</td>
                   <td className="r num">{Math.round(c.textSeen * 100)}%</td>
@@ -124,6 +127,7 @@ export default function VerdictPanel({ deck }) {
       {rows?.every((c) => c.verdict) && (
         <>
           <p className="sub small">
+            {meta?.worstName && <>Your worst meta matchup in these games is {meta.worstName} ({meta.worstWin}%), so each card&apos;s value there gets its own column. </>}
             Hover a verdict for what to do with it. Own value is noisy: anything inside its ± is a tie with a plain body. Engines and cards the
             sim can&apos;t read are judged by logged games, not by this table.
           </p>

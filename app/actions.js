@@ -433,17 +433,22 @@ export async function cardKnockouts(deckId, names, games = 200) {
   const run = metaRun(cards, opps);
   const base = run(d.deck.main, { games: G, seed0: 1 });
   const byName = new Map(d.cards.map((c) => [c.name.split(" // ")[0], c]));
+  const stat = (dd) => {
+    const mean = dd.reduce((t, x) => t + x, 0) / dd.length;
+    const sd = Math.sqrt(dd.reduce((t, x) => t + (x - mean) ** 2, 0) / Math.max(1, dd.length - 1));
+    return { mean: +(mean * 100).toFixed(1), se: +((sd / Math.sqrt(dd.length)) * 100).toFixed(1) };
+  };
+  // the deck's worst meta matchup on these games (minimax: a card's value there matters most)
+  const winRates = base.map((r) => r.reduce((t, x) => t + x, 0) / r.length);
+  const wi = winRates.indexOf(Math.min(...winRates));
   const rows = pick.map((name) => {
     const s = standIn(byName.get(name));
     const alt = run(knockOut(d.deck.main, name, s.name), { games: G, seed0: 1 });
-    const flat = (r) => r.flat();
-    const a = flat(base), b = flat(alt);
-    const dd = a.map((x, i) => x - b[i]);
-    const mean = dd.reduce((t, x) => t + x, 0) / dd.length;
-    const sd = Math.sqrt(dd.reduce((t, x) => t + (x - mean) ** 2, 0) / Math.max(1, dd.length - 1));
-    return { name, standIn: s.name, own: +(mean * 100).toFixed(1), ownSe: +((sd / Math.sqrt(dd.length)) * 100).toFixed(1) };
+    const all = stat(base.flat().map((x, i) => x - alt.flat()[i]));
+    const per = base.map((r, k) => stat(r.map((x, i) => x - alt[k][i])));
+    return { name, standIn: s.name, own: all.mean, ownSe: all.se, perOpp: per.map((p) => p.mean), worst: per[wi].mean, worstSe: per[wi].se };
   });
-  return { rows, games: G };
+  return { rows, games: G, worstName: META_DECKS[wi].name, worstWin: +(winRates[wi] * 100).toFixed(1), oppNames: META_DECKS.map((m) => m.name) };
 }
 
 /** Replacement candidates for up to 2 cards: the best cheap answers and the most efficient bodies in the deck's colors. */
