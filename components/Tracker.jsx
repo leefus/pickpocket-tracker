@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { addMatch, removeMatch, requestAnalysis } from "@/app/actions";
 import { deadCardChoices, parseGuide, parseList } from "@/lib/decklist.mjs";
+import { boardDeck, guideRows } from "@/lib/sideplan.mjs";
 import { ARCHETYPES, COLORS, EVENTS, NOT_IN_META, colorCode } from "@/lib/meta.mjs";
 import { opponentLabel, pct, summarize, won, worstFromGuide } from "@/lib/stats.mjs";
 import { PasscodeRow, usePasscode } from "./usePasscode";
@@ -57,6 +58,21 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
   );
   const main = useMemo(() => parseList(deck?.main), [deck?.main]);
   const side = useMemo(() => parseList(deck?.side), [deck?.side]);
+  // the guide as the page shows it: plans split from their notes, checked against the 75
+  const guideView = useMemo(() => {
+    const known = [...main.cards, ...side.cards].map((c) => c.name);
+    const rows = guideRows(deck?.guide, known);
+    const txt = (xs) => xs.map((x) => `${x.qty} ${x.name}`).join(", ");
+    return {
+      notes: rows.filter((r) => !r.label).map((r) => r.note),
+      rows: rows
+        .filter((r) => r.label)
+        .map((r) => {
+          const hasPlan = !r.noChange && (r.ins.length || r.outs.length);
+          return { ...r, insText: txt(r.ins), outsText: txt(r.outs), errors: hasPlan ? boardDeck(deck?.main, deck?.side, r).errors : [] };
+        }),
+    };
+  }, [deck?.guide, deck?.main, deck?.side, main, side]);
   const deadChoices = useMemo(() => deadCardChoices(deck?.main, deck?.side), [deck?.main, deck?.side]);
   const reviewIsStale = deck?.review && deck?.reviewedMatches != null && s.overall.n > deck.reviewedMatches;
 
@@ -479,7 +495,9 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
           </section>
 
           <details>
-            <summary>The {main.count + side.count} and sideboard guide</summary>
+            <summary>
+              {main.count === 60 && side.count === 15 ? "The 75" : `Main deck (${main.count}) and sideboard (${side.count})`} and sideboard guide
+            </summary>
             <div className="cols">
               <div>
                 <h3>Main deck ({main.count})</h3>
@@ -504,7 +522,17 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
                 </ul>
               </div>
             </div>
-            {guide.length > 0 && (
+            {side.count < 15 && (
+              <p className="msg err" style={{ marginTop: 12 }}>
+                The sideboard has {side.count} of 15 cards.
+              </p>
+            )}
+            {guideView.notes.map((n) => (
+              <p key={n} className="sub small" style={{ marginTop: 12 }}>
+                {n}
+              </p>
+            ))}
+            {guideView.rows.length > 0 && (
               <div className="tbl" style={{ marginTop: 16 }}>
                 <table>
                   <thead>
@@ -512,14 +540,19 @@ export default function Tracker({ deck, decks, meta, matches, report = null, pla
                       <th>Opponent</th>
                       <th>In</th>
                       <th>Out</th>
+                      <th>Notes</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {guide.map((g) => (
-                      <tr key={g.opp}>
-                        <td>{g.opp}</td>
-                        <td><CardList text={g.ins} /></td>
-                        <td><CardList text={g.outs} /></td>
+                    {guideView.rows.map((g) => (
+                      <tr key={g.line}>
+                        <td>{g.label}</td>
+                        <td>{g.noChange ? "No change" : <CardList text={g.insText} />}</td>
+                        <td>{g.noChange ? "" : <CardList text={g.outsText} />}</td>
+                        <td className="small">
+                          {g.note}
+                          {g.errors.length > 0 && <span className="msg err"> {g.errors.join(" ")}</span>}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

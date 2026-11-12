@@ -3,6 +3,9 @@
 import { useState, useTransition } from "react";
 import { simulateMatchups, testSideboardPlan } from "@/app/actions";
 import { planFor } from "@/lib/sideplan.mjs";
+import { parseList } from "@/lib/decklist.mjs";
+
+const knownNames = (deck) => [...parseList(deck.main).cards, ...parseList(deck.side).cards].map((c) => c.name);
 
 const pc = (x) => (x == null ? "—" : `${Math.round(x * 100)}%`);
 const tone = (w) => (w >= 0.55 ? "good" : w <= 0.45 ? "bad" : "warn");
@@ -13,13 +16,13 @@ function PlanTester({ deck, rows }) {
   const sorted = [...rows].sort((a, b) => a.win - b.win);
   const [opp, setOpp] = useState(sorted[0]?.key ?? "");
   const name = rows.find((r) => r.key === opp)?.name ?? "";
-  const [text, setText] = useState(() => planText(planFor(deck.guide, sorted[0]?.name ?? "")));
+  const [text, setText] = useState(() => planText(planFor(deck.guide, sorted[0]?.name ?? "", knownNames(deck))));
   const [res, setRes] = useState(null);
   const [pending, start] = useTransition();
   const pick = (key) => {
     setOpp(key);
     setRes(null);
-    setText(planText(planFor(deck.guide, rows.find((r) => r.key === key)?.name ?? "")));
+    setText(planText(planFor(deck.guide, rows.find((r) => r.key === key)?.name ?? "", knownNames(deck))));
   };
   const run = () =>
     start(async () => {

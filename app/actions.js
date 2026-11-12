@@ -341,7 +341,7 @@ export async function testSideboardPlan(deckId, opponentKey, planText) {
   const o = s.opponents.find((x) => x.key === opponentKey);
   if (!o) return { error: "Pick an opponent." };
   const typed = String(planText ?? "").slice(0, 2000).trim();
-  const plan = typed ? parsePlan(typed) : planFor(s.deck.guide, o.name);
+  const plan = typed ? parsePlan(typed) : planFor(s.deck.guide, o.name, [...parseList(s.deck.main).cards, ...parseList(s.deck.side).cards].map((c) => c.name));
   if (!plan) return { error: `The sideboard guide has no line for ${o.name}. Type a plan like "+2 Get Lost -2 Hop to It".` };
   const boarded = boardDeck(s.deck.main, s.deck.side, plan);
   if (boarded.errors.length) return { error: boarded.errors.join(" "), plan: { ins: plan.ins, outs: plan.outs } };
